@@ -1,0 +1,28 @@
+{
+  "data_output": "output",
+  "data_output_sample": [
+    {
+      "op": "info",
+      "text": "sample_text"
+    },
+    {
+      "op": "captcha",
+      "img_path": "sample_img_path"
+    },
+    {
+      "op": "finish",
+      "img_path": "sample_img_path"
+    },
+    {
+      "op": "ultimate",
+      "img_path": "sample_img_path"
+    }
+  ],
+  "data_input": "input",
+  "data_input_sample": [
+    {
+      "op": "answer",
+      "answer": "1 2 3"
+    }
+  ]
+}

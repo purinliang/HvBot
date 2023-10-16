@@ -1,0 +1,5 @@
+coloredlogs~=15.0.1
+Pillow~=10.0.1
+PyAutoGUI~=0.9.54
+pytesseract~=0.3.10
+setuptools~=65.5.0
