@@ -65,24 +65,20 @@ def find_attack_min_hp_target_index(monster_list: MonsterList) -> int:
 
 def find_attack_max_deterrent_target_index(monster_list: MonsterList) -> int:
     """
-    Find a suitable target for normal attack.
+    Find a target with max_deterrent under some conditions for normal attack.
 
     Notice that this function will not distinct boss monster.
     :param monster_list:
     :return: target monster index, or -1 represent not find
     """
-    filtered_monsters = [monster for monster in monster_list.monsters
-                         if not monster.dead]
+    filtered_monsters = [monster for monster in monster_list.monsters if not monster.dead]
 
-    if len(filtered_monsters) == 0:
-        # in regular routine, the program will never enter this branch
-        # logging.debug("attack: no target")
+    if not filtered_monsters:
+        # in regular routine, the program will never enter this branch, maybe there is some bugs?
         return -1
 
-    filtered_monsters_deterrents = [(monster, monster.calc_deterrent("attack")) for monster in filtered_monsters]
-
     # find the monster who has the most deterrent in above lists
-    max_deterrent_monster: Monster = (max(filtered_monsters_deterrents, key=lambda tup: tup[1]))[0]
+    max_deterrent_monster: Monster = max(filtered_monsters, key=lambda monster: monster.calc_deterrent("attack"))
     # logging.debug(
     #     f"attack: max_deterrent_monster={monster_list.number_index_to_letter_index(max_deterrent_monster.index)}")
     return max_deterrent_monster.index
@@ -111,15 +107,16 @@ def maintain_attack(monster_list: MonsterList, attack_strategy: str) -> dict:
 
 def deterrent_of_position(monster: Monster, *, monster_list: MonsterList, spell_name: str) -> float:
     """
-    deterrent of a position: the sum of the nearby 3 monsters' deterrent
+    Deterrent of a position is the sum of the monster's deterrent and its 2 adjacent monsters' deterrents
     :param monster:
     :param monster_list:
-    :param spell_name: calc_deterrent require this parameter
-    :return: sum of deterrent of these 3 monsters
+    :param spell_name: different spell correspond to different deterrent,
+                       so method "calc_deterrent" require this parameter
+    :return: sum of deterrents of the 3 monsters
     """
     if monster.dead:
-        # a dead monster cannot be a target, regardless how large its neighbors deterrent
+        # a dead monster cannot be a target, regardless how large deterrent its neighbors have
         return 0.0
-    neighbor_monster_list = [neighbor_monster for neighbor_monster in monster_list.monsters
-                             if abs(monster.index - neighbor_monster.index) <= 1]
-    return sum([neighbor.calc_deterrent(spell_name) for neighbor in neighbor_monster_list])
+    adjacent_monster_list = [monster for monster in monster_list.monsters
+                             if abs(monster.index - monster.index) <= 1]
+    return sum([monster.calc_deterrent(spell_name) for monster in adjacent_monster_list])
