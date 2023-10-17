@@ -23,7 +23,7 @@ def get_strategy_encounter(character: Character, monster_list: MonsterList):
         return strategy_use_spell("silence", index)
 
     if (character.mp >= 0.35 and character.have_spell("weaken")
-            and mid_level_strategy_common.should_use_spell(monster_list, "weaken", force_use=False)):
+            and mid_level_strategy_common.should_use_spell(monster_list, "weaken", force_use=True)):
         index = mid_level_strategy_common.get_spell_target_index(monster_list, "weaken", force_use=True)
         return strategy_use_spell("weaken", index)
 
