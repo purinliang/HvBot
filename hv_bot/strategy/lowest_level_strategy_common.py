@@ -105,18 +105,18 @@ def maintain_attack(monster_list: MonsterList, attack_strategy: str) -> dict:
     return strategy_attack(attack_index)
 
 
-def deterrent_of_position(monster: Monster, *, monster_list: MonsterList, spell_name: str) -> float:
+def deterrent_of_position(target_monster: Monster, *, monster_list: MonsterList, spell_name: str) -> float:
     """
     Deterrent of a position is the sum of the monster's deterrent and its 2 adjacent monsters' deterrents
-    :param monster:
+    :param target_monster:
     :param monster_list:
     :param spell_name: different spell correspond to different deterrent,
                        so method "calc_deterrent" require this parameter
     :return: sum of deterrents of the 3 monsters
     """
-    if monster.dead:
+    if target_monster.dead:
         # a dead monster cannot be a target, regardless how large deterrent its neighbors have
         return 0.0
     adjacent_monster_list = [monster for monster in monster_list.monsters
-                             if abs(monster.index - monster.index) <= 1]
+                             if abs(monster.index - target_monster.index) <= 1]
     return sum([monster.calc_deterrent(spell_name) for monster in adjacent_monster_list])
