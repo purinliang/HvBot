@@ -1,3 +1,4 @@
 /user_data/
 /.idea/
 /user_data/saves/
+*.pyc
