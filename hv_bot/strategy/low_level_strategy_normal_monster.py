@@ -29,7 +29,7 @@ def find_debuff_targe_index(monster_list: MonsterList, *, spell_name: str,
     # sum of monsters' deterrent factor
     sum_deterrent = sum([monster.calc_deterrent(spell_name) for monster in monster_list.monsters])
 
-    if (sum_deterrent <= 3.0
+    if (sum_deterrent <= 4.0
             or (not force_use and sum_deterrent <= sum_deterrent_limit)):
         # logging.debug(f"{spell_name}: sum_deterrent={sum_deterrent:.2f} too low")
         return -1
@@ -43,7 +43,7 @@ def find_debuff_targe_index(monster_list: MonsterList, *, spell_name: str,
     if max_deterrent_monster.dead:
         logging.error(f"{spell_name}: max_deterrent_monster dead, something get wrong?")
         return -1
-    if (max_deterrent_monster.dead or max_deterrent_of_position <= 1.25
+    if (max_deterrent_monster.dead or max_deterrent_of_position <= 1.75
             or (not force_use and max_deterrent_of_position <= max_deterrent_of_position_limit)):
         # logging.debug(f"{spell_name}: max_deterrent_of_position={max_deterrent_of_position:.2f} too low")
         return -1
@@ -74,7 +74,7 @@ def find_silence_target_index(monster_list, *, force_use=False) -> int:
     :return: target monster index, or -1 represent not find
     """
     return find_debuff_targe_index(monster_list, spell_name="silence", alive_count_limit=3,
-                                   sum_deterrent_limit=10.5, max_deterrent_of_position_limit=4.0, force_use=force_use)
+                                   sum_deterrent_limit=12.25, max_deterrent_of_position_limit=4.25, force_use=force_use)
 
 
 def find_vital_strike_target_index(monster_list) -> int:
@@ -87,7 +87,7 @@ def find_vital_strike_target_index(monster_list) -> int:
     # filter monsters who are "shocked" and taking more damage by "vital_strike". it will be more efficient.
     shocked_monsters = [monster for monster in monster_list.monsters
                         if not monster.dead
-                        and monster.have_status('shocked')]
+                        and monster.have_status("shocked")]
 
     # find target without "silence" and "weaken" first, they are more deterrent
     # filter monsters who aren't "silence" and "weaken" and their hp >= 0.3

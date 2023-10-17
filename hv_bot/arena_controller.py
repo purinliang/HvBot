@@ -102,7 +102,6 @@ def _start_once_select_arena(event: threading.Event) -> bool:
         hv_bot.gui.gui_execute.move_and_click(x, y, ending_wait_duration=1)
         fullscreen_image: Image = hv_bot.gui.gui_execute.get_fullscreen_image()
         if detected_dialog(fullscreen_image):
-            handle_dialog(fullscreen_image, report=False)
             logging.info(f"select the {ordinal(i + 1)} arena has been selected")
             send_text(f"选择了倒数第{i + 1}个竞技场，于{style_time}")
 

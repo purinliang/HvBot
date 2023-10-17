@@ -37,5 +37,5 @@ def get_spell_target_index(monster_list: MonsterList, spell_name: str, *, force_
         case "weaken":
             return low_level_strategy_normal_monster.find_weaken_target_index(monster_list, force_use=force_use)
         case "shield_bash" | "orbital_friendship_cannon":
-            return lowest_level_strategy_common.find_attack_target_index(monster_list, attack_max_hp=True)
+            return lowest_level_strategy_common.find_attack_max_hp_target_index(monster_list)
     return -1
