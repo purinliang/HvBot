@@ -58,8 +58,8 @@ def _submit_captcha(answer_index_list: List[int]) -> None:
 
 
 # the following two variable is global, because they should be mocked by test
-CAPTCHA_TIME_LIMITATION = 30
-CAPTCHA_TIME_SUBMIT_LIMITATION = -90  # negative number means that captcha timeout for 60 seconds,
+CAPTCHA_TIME_LIMITATION = 25
+CAPTCHA_TIME_SUBMIT_LIMITATION = -60  # negative number means that captcha timeout for 60 seconds
 
 
 def handle_captcha(fullscreen_image: Image):
@@ -86,13 +86,13 @@ def handle_captcha(fullscreen_image: Image):
     # send captcha image and poll
     send_image(captcha_image_path)
 
-    rest_time_alert = 25
+    rest_time_alert = 20 + 0.2
     while True:
         current_time_stamp = time.time()
         rest_time = detected_time_stamp + CAPTCHA_TIME_LIMITATION - current_time_stamp
         if 0 <= rest_time <= rest_time_alert:
-            logging.warning(f"rest_time={rest_time:.1f}")
-            send_text(f"剩余时间：{rest_time:.1f}")
+            logging.warning(f"rest_time={rest_time:.0f}")
+            send_text(f"剩余时间：{rest_time:.0f}")
 
             _captcha_beep()
 
@@ -114,7 +114,7 @@ def handle_captcha(fullscreen_image: Image):
         fullscreen_image = gui_execute.get_fullscreen_image()
         _handle_answer_from_sub_from_queue(rest_time)
 
-        time.sleep(0.25)
+        time.sleep(0.125)
     # sleep for about 1 second, waiting for submitting
     time.sleep(0.8)
     return
@@ -133,16 +133,19 @@ def _random_choice_captcha_to_submit() -> None:
 
 
 def _report_captcha_timeout(rest_time: float) -> None:
-    logging.warning(f"captcha timeout, rest_time={rest_time:.1f}")
-    send_text(f"验证码已超时，剩余时间={rest_time:.1f}")
+    logging.warning(f"captcha timeout, rest_time={rest_time:.0f}")
+    text = f"验证码已超时，剩余时间={rest_time:.0f}"
+    if rest_time < 0:
+        text = f"验证码已超时，超时时间={abs(rest_time):.0f}"
+    send_text(text)
     winsound.Beep(1200, 600)
     time.sleep(0.8)
     return
 
 
 def _report_captcha_submitted(rest_time: float) -> None:
-    logging.info(f"captcha submitted, rest_time={rest_time:.1f}")
-    send_text(f"验证码已被提交，剩余时间={rest_time:.1f}")
+    logging.info(f"captcha not find, has it been submitted? rest_time={rest_time:.1f}")
+    send_text(f"验证码已消失，是否已被提交？剩余时间={rest_time:.1f}")
     winsound.Beep(600, 600)
     time.sleep(0.8)
     return
