@@ -34,8 +34,8 @@ def save_fullscreen_image(image_name_prefix: str) -> str:
     # sample time format: "%Y-%m-%d %H:%M:%S"
     style_time = time.strftime("%m%d_%H%M%S", time.localtime(current_time))
 
-    hv_bot.util.path.chdir_saves_today()
-    image_path = f"{image_name_prefix}_{style_time}.png"
+    saves_dir_path = hv_bot.util.path.get_saves_dir_path()
+    image_path = os.path.join(saves_dir_path, f"{image_name_prefix}_{style_time}.png")
     fullscreen_image.save(image_path)
     cwd = os.getcwd()
     full_path = os.path.join(cwd, image_path)
