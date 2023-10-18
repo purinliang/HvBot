@@ -19,6 +19,12 @@ def detected_captcha(fullscreen_image: Image) -> bool:
     needle_image = Image.open(f"res\\captcha_twilight_sparkle.png")
     if have_image(needle_image, fullscreen_image, confidence=0.99):
         return True
+    needle_image = Image.open(f"res\\captcha_confirm_button.png")
+    if have_image(needle_image, fullscreen_image, confidence=0.99):
+        return True
+    needle_image = Image.open(f"res\\captcha_confirm_button_disabled.png")
+    if have_image(needle_image, fullscreen_image, confidence=0.99):
+        return True
     return False
 
 
