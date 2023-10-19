@@ -1,6 +1,6 @@
 # HvBot
 
-version: 0.3.1.0
+version: 0.3.0.5
 
 author: purinliang
 
