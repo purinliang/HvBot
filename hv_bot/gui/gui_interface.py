@@ -129,7 +129,7 @@ def attack(monster_list: MonsterList, index: int) -> None:
     return
 
 
-def get_info_from_fullscreen_image(fullscreen_image: Image, *, ocr_round_count=False) \
+def get_info_from_fullscreen_image(fullscreen_image: Image, *, ocr_round_count=False, round_count: int, sum_round: int) \
         -> [Character | None, MonsterList | None]:
     if detected_captcha(fullscreen_image) or detected_finish(fullscreen_image) or detected_dialog(fullscreen_image):
         logging.warning(f"have_captcha_or_finish_or_dialog")
@@ -137,7 +137,8 @@ def get_info_from_fullscreen_image(fullscreen_image: Image, *, ocr_round_count=F
 
     character: Character = get_character(fullscreen_image)
     # logging.debug(character)
-    monster_list: MonsterList = get_monster_list(fullscreen_image, ocr_round_count=ocr_round_count)
+    monster_list: MonsterList = get_monster_list(fullscreen_image, ocr_round_count=ocr_round_count,
+                                                 round_count=round_count, sum_round=sum_round)
     # logging.debug(monster_list)
 
     return character, monster_list

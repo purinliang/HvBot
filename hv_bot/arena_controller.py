@@ -189,7 +189,8 @@ def _start_battle_arena(event: threading.Event) -> None:
             return
 
         fullscreen_image = hv_bot.gui.gui_execute.get_fullscreen_image()
-        character, monster_list = get_info_from_fullscreen_image(fullscreen_image, ocr_round_count=ocr_round_count)
+        character, monster_list = get_info_from_fullscreen_image(
+            fullscreen_image, ocr_round_count=ocr_round_count, round_count=round_count, sum_round=sum_round)
 
         if character is None or monster_list is None:
             if detected_captcha(fullscreen_image):

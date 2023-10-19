@@ -1,5 +1,6 @@
 import logging
 
+from hv_bot.external_communication_controller import send_text
 from hv_bot.identify.character import Character
 from hv_bot.identify.monster_list import MonsterList
 from hv_bot.strategy import lowest_level_strategy_common, mid_level_strategy_common, low_level_strategy_boss
@@ -123,6 +124,12 @@ def battle_with_ultimates(character: Character, monster_list: MonsterList) -> di
     # logging.warning(monster_list)
     # if yggdrasil is alive, kill it first
     logging.debug(f"battle_with_ultimates yyg_index={yyg_index}")
-    return _battle_with_few_dangerous_bosses(character, monster_list, "max_deterrent")
+    return _battle_with_few_dangerous_bosses(character, monster_list, "min_hp")
 
-# TODO battle with dragons
+
+def battle_with_dragons(character: Character, monster_list: MonsterList) -> dict:
+    if not monster_list.have_dragon():
+        return {}
+    logging.debug(f"battle_with_dragons")
+    send_text(f"battle_with_dragons")
+    return _battle_with_few_dangerous_bosses(character, monster_list, "min_hp")

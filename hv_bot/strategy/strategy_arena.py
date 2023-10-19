@@ -284,6 +284,10 @@ def get_strategy_arena(character: Character, monster_list: MonsterList):
     if strategy != {}:
         return strategy
 
+    strategy: dict = strategy_arena_battle_with_boss.battle_with_dragons(character, monster_list)
+    if strategy != {}:
+        return strategy
+
     strategy: dict = strategy_arena_battle_with_boss.battle_with_ultimates(character, monster_list)
     if strategy != {}:
         return strategy
