@@ -24,7 +24,7 @@ def click_finish_button(fullscreen_image: Image) -> None:
     return
 
 
-def handle_finish(fullscreen_image: Image) -> None:
+def click_finish(fullscreen_image: Image) -> None:
     if not detected_finish(fullscreen_image):
         return
 

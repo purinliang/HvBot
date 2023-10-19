@@ -8,9 +8,9 @@ from PIL import Image
 
 from hv_bot.external_communication_controller import send_text
 from hv_bot.gui.gui_captcha import detected_captcha, handle_captcha
-from hv_bot.gui.gui_dialog import detected_dialog, handle_dialog
+from hv_bot.gui.gui_dialog import detected_dialog, click_dialog
 from hv_bot.gui.gui_execute import move_and_hover, move_and_click, get_fullscreen_image, move_relatively_and_hover
-from hv_bot.gui.gui_finish import detected_finish, handle_finish
+from hv_bot.gui.gui_finish import detected_finish, click_finish
 from hv_bot.gui.gui_interface import get_info_from_fullscreen_image, execute_strategy
 from hv_bot.identify.character import get_exp
 from hv_bot.strategy.strategy_encounter import get_strategy_encounter
@@ -54,7 +54,15 @@ def _click_encounter() -> None:
     logging.info(f"click_encounter")
     x = ENCOUNTER_IMAGE_LEFT + ENCOUNTER_IMAGE_WIDTH // 2
     y = ENCOUNTER_IMAGE_TOP + ENCOUNTER_IMAGE_HEIGHT // 2
-    move_and_click(x, y, move_duration=0.5, ending_wait_duration=0.75)
+    move_and_click(x, y, move_duration=0.1, ending_wait_duration=0.75)
+    return
+
+
+def _hover_encounter() -> None:
+    logging.info(f"hover_encounter")
+    x = ENCOUNTER_IMAGE_LEFT + ENCOUNTER_IMAGE_WIDTH // 2
+    y = ENCOUNTER_IMAGE_TOP + ENCOUNTER_IMAGE_HEIGHT // 2
+    move_and_hover(x, y, move_duration=0.5)
     return
 
 
@@ -199,11 +207,11 @@ def _start_battle_encounter(event: threading.Event) -> None:
                 logging.warning(f"auto battle encounter, detected_captcha")
                 continue
             if detected_dialog(fullscreen_image):
-                handle_dialog(fullscreen_image)
+                click_dialog(fullscreen_image)
                 logging.warning(f"auto battle encounter, detected_dialog")
                 continue
             if detected_finish(fullscreen_image):
-                handle_finish(fullscreen_image)
+                click_finish(fullscreen_image)
                 exp = get_exp(fullscreen_image)
                 logging.warning(f"auto battle encounter, finished, exit, exp={exp:.2f}%")
                 send_text(f"遭遇战自动战斗，战斗已结束，退出，exp={exp:.2f}%")
@@ -256,7 +264,7 @@ def _start_once_select_encounter(event: threading.Event) -> None:
             send_text(f"选择遭遇战失败，没有Ready，退出")
             break
 
-        _click_encounter()
+        _hover_wait_and_click_encounter()
 
         if not _handle_encounter_failed_dialog(retry_times=3, retry_waiting_duration=15):
             logging.info(f"failed to select encounter, failed to handle failed dialog, exit")
@@ -327,12 +335,7 @@ def _start_auto_select_encounter(event: threading.Event) -> None:
             _sleep_for_long_time(sleeping_time, event)
             continue
 
-        # the following warning logic is only suitable for auto_select_encounter
-        before_clicking_encounter_warning_time = 10
-        logging.info(f"click encounter in {before_clicking_encounter_warning_time} seconds, please get ready")
-        send_text(f"将在{before_clicking_encounter_warning_time}秒内点击遭遇战，请准备")
-        time.sleep(before_clicking_encounter_warning_time)
-        _click_encounter()
+        _hover_wait_and_click_encounter()
 
         if not _handle_encounter_failed_dialog(retry_times=8, retry_waiting_duration=15):
             sleeping_time = 15 * 60
@@ -351,6 +354,16 @@ def _start_auto_select_encounter(event: threading.Event) -> None:
         continue
 
     return
+
+
+def _hover_wait_and_click_encounter():
+    _hover_encounter()
+    # the following warning logic is only suitable for auto_select_encounter
+    before_clicking_encounter_warning_time = 5
+    logging.info(f"click encounter in {before_clicking_encounter_warning_time} seconds, please get ready")
+    send_text(f"将在{before_clicking_encounter_warning_time}秒内点击遭遇战，请准备")
+    time.sleep(before_clicking_encounter_warning_time)
+    _click_encounter()
 
 
 if __name__ == '__main__':

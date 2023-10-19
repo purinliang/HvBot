@@ -9,9 +9,9 @@ import hv_bot
 from hv_bot.encounter_controller import _start_auto_select_encounter, _start_once_select_encounter
 from hv_bot.external_communication_controller import send_text, send_image
 from hv_bot.gui.gui_captcha import detected_captcha, handle_captcha
-from hv_bot.gui.gui_dialog import detected_dialog, handle_dialog
+from hv_bot.gui.gui_dialog import detected_dialog, click_dialog, hover_dialog
 from hv_bot.gui.gui_execute import save_fullscreen_image
-from hv_bot.gui.gui_finish import detected_finish, handle_finish
+from hv_bot.gui.gui_finish import detected_finish, click_finish
 from hv_bot.gui.gui_interface import get_info_from_fullscreen_image, execute_strategy
 from hv_bot.identify.character import Character, get_exp
 from hv_bot.identify.monster_list import MonsterList
@@ -88,7 +88,7 @@ def _start_once_select_arena(event: threading.Event) -> bool:
 
     # if current state is finished battle, exit it
     if detected_finish(fullscreen_image):
-        handle_finish(fullscreen_image)
+        click_finish(fullscreen_image)
         time.sleep(3)
 
     # after battle, the page may be in other panel, chose arena panel
@@ -105,13 +105,15 @@ def _start_once_select_arena(event: threading.Event) -> bool:
             logging.info(f"select the {ordinal(i + 1)} arena has been selected")
             send_text(f"选择了倒数第{i + 1}个竞技场，于{style_time}")
 
+            hover_dialog(fullscreen_image)
+
             # the following warning logic is only suitable for start_auto_select_arena
             before_starting_arena_warning_time = 5
             logging.info(f"start arena in {before_starting_arena_warning_time} seconds, please get ready")
             send_text(f"将在{before_starting_arena_warning_time}秒内开始竞技场，请准备")
             time.sleep(before_starting_arena_warning_time)
 
-            handle_dialog(fullscreen_image, report=False)
+            click_dialog(fullscreen_image, report=False)
             time.sleep(1)
             return True
 
@@ -192,11 +194,11 @@ def _start_battle_arena(event: threading.Event) -> None:
                 logging.warning(f"auto battle arena, detected_captcha")
                 continue
             if detected_dialog(fullscreen_image):
-                handle_dialog(fullscreen_image)
+                click_dialog(fullscreen_image)
                 logging.warning(f"auto battle arena, detected_dialog")
                 continue
             if detected_finish(fullscreen_image):
-                handle_finish(fullscreen_image)
+                click_finish(fullscreen_image)
                 exp = get_exp(fullscreen_image)
                 logging.warning(f"auto battle arena, finished, exit，exp={exp:.2f}%")
                 send_text(f"竞技场自动战斗，战斗已结束，退出，exp={exp:.2f}%")

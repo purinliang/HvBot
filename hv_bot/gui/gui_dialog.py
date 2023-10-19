@@ -6,13 +6,20 @@ from PIL import Image
 
 import hv_bot.util.path
 from hv_bot.external_communication_controller import send_text, send_image
-from hv_bot.gui.gui_execute import have_image, locate_image_and_click, save_fullscreen_image
+from hv_bot.gui.gui_execute import have_image, locate_image_and_click, save_fullscreen_image, locate_image_and_hover
 
 
 def detected_dialog(fullscreen_image: Image) -> bool:
     os.chdir(hv_bot.util.path.ROOT_PATH)
     needle_image = Image.open("res\\dialog_confirm_button.png")
     return have_image(needle_image, fullscreen_image)
+
+
+def _hover_dialog_confirm_button(fullscreen_image: Image) -> None:
+    os.chdir(hv_bot.util.path.ROOT_PATH)
+    needle_image = Image.open("res\\dialog_confirm_button.png")
+    locate_image_and_hover(needle_image, fullscreen_image)
+    return
 
 
 def _click_dialog_confirm_button(fullscreen_image: Image) -> None:
@@ -22,7 +29,7 @@ def _click_dialog_confirm_button(fullscreen_image: Image) -> None:
     return
 
 
-def handle_dialog(fullscreen_image: Image, *, report=True) -> None:
+def click_dialog(fullscreen_image: Image, *, report=True) -> None:
     if not detected_dialog(fullscreen_image):
         return
 
@@ -38,4 +45,11 @@ def handle_dialog(fullscreen_image: Image, *, report=True) -> None:
         send_image(saved_fullscreen_image_path)
 
     _click_dialog_confirm_button(fullscreen_image)
+    return
+
+
+def hover_dialog(fullscreen_image: Image) -> None:
+    if not detected_dialog(fullscreen_image):
+        return
+    _hover_dialog_confirm_button(fullscreen_image)
     return
