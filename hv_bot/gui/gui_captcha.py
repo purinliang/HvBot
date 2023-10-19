@@ -58,7 +58,7 @@ def _submit_captcha(answer_index_list: List[int]) -> None:
 
 
 # the following two variable is global, because they should be mocked by test
-CAPTCHA_TIME_LIMITATION = 25
+CAPTCHA_TIME_LIMITATION = 30 + 1
 CAPTCHA_TIME_SUBMIT_LIMITATION = -60  # negative number means that captcha timeout for 60 seconds
 
 
