@@ -92,11 +92,13 @@ def _click_encounter_failed_dialog() -> None:
 
 def _update_encounter_status(fullscreen_image: Image) -> [str, str]:
     stamina_image = _crop_stamina_image(fullscreen_image)
-    stamina_text = ocr_single_line_text(stamina_image)
+    # Sometimes ocr returns Stamina: 58°
+    stamina_text = ocr_single_line_text(stamina_image).removesuffix("°")
     if stamina_text.endswith("."):
         stamina_text = stamina_text.removesuffix(".")
     encounter_image = _crop_encounter_image(fullscreen_image)
-    encounter_text = ocr_single_line_text(encounter_image)
+    # Sometimes ocr returns (29:27 [24]
+    encounter_text = ocr_single_line_text(encounter_image).removeprefix("(")
     logging.info(f"update_encounter_status stamina_text={stamina_text}, encounter_text={encounter_text}")
     send_text(f"耐力状态：{stamina_text}，遭遇战状态：{encounter_text}")
     return stamina_text, encounter_text
