@@ -8,6 +8,7 @@ from PIL import Image
 import hv_bot
 from hv_bot.encounter_controller import _start_auto_select_encounter, _start_once_select_encounter
 from hv_bot.external_communication_controller import send_text, send_image
+from hv_bot.gui import gui_battle_continue
 from hv_bot.gui.gui_captcha import detected_captcha, handle_captcha
 from hv_bot.gui.gui_dialog import detected_dialog, click_dialog, hover_dialog
 from hv_bot.gui.gui_execute import save_fullscreen_image
@@ -142,6 +143,14 @@ def _start_auto_select_arena(event: threading.Event, battle_count_limit=2) -> No
     logging.info(f"start_auto_select_arena, battle_count_limit={battle_count_limit}")
     send_text(f"开始连续选择竞技场，次数限制={battle_count_limit}")
     battle_count = 0
+
+    if gui_battle_continue.is_battling():
+        battle_count += 1
+        time.sleep(1)
+        logging.info(f"the previous battle hasn't ended, battle_continue")
+        send_text(f"上次战斗尚未结束，继续战斗")
+        _start_battle_arena(event)
+
     while battle_count < battle_count_limit:
         # check whether encounter is stand by, if true, take encounter first
         _start_once_select_encounter(event)
