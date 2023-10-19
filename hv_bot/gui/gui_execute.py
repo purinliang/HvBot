@@ -17,6 +17,7 @@ def get_fullscreen_image() -> Image:
 
     # the following two lines are used for test
     # os.chdir(hv_bot.util.path.ROOT_PATH)
+    # fullscreen_image = Image.open("res/captcha_1019_004130.png")
 
     if fullscreen_image is None:
         # if no test image, use screenshot to instead
@@ -115,4 +116,14 @@ def locate_image_and_click(needle_image, haystack_image, *, confidence=None) -> 
     x = location.left + location.width // 2
     y = location.top + location.height // 2
     move_and_click(x, y)
+    return
+
+
+def locate_image_and_hover(needle_image, haystack_image, *, confidence=None) -> None:
+    if not have_image(needle_image, haystack_image, confidence=confidence):
+        return
+    location = locate_image(needle_image, haystack_image, confidence=confidence)
+    x = location.left + location.width // 2
+    y = location.top + location.height // 2
+    move_and_hover(x, y)
     return
