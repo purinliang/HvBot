@@ -228,17 +228,25 @@ def _start_battle_arena(event: threading.Event) -> None:
     return
 
 
-def send_round_info(round_count, sum_round, exp) -> None:
-    logging.warning(f"the {ordinal(round_count)} round, exp={exp:.2f}%")
+def _should_send_round_info(round_count: int, sum_round: int) -> bool:
+    if round_count == 1:
+        return True
     if sum_round <= 75:  # 树场打的比较快
         if round_count % 20 == 0:
-            send_text(f"第{round_count}/{sum_round}轮，exp={exp:.2f}%")
+            return True
     elif sum_round <= 85:  # 单个女高中生的场，打的还算快
         if round_count % 15 == 0:
-            send_text(f"第{round_count}/{sum_round}轮，exp={exp:.2f}%")
+            return True
     else:
         if round_count % 10 == 0:
-            send_text(f"第{round_count}/{sum_round}轮，exp={exp:.2f}%")
+            return True
+    return False
+
+
+def send_round_info(round_count: int, sum_round: int, exp: float) -> None:
+    logging.warning(f"the {ordinal(round_count)} round, exp={exp:.2f}%")
+    if _should_send_round_info(round_count, sum_round):
+        send_text(f"第{round_count}/{sum_round}轮，exp={exp:.2f}%")
 
     # if round_count % 30 == 0:
     #     screenshot_image_path = save_fullscreen_image("screenshot")
