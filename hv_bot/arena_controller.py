@@ -105,16 +105,7 @@ def _start_once_select_arena(event: threading.Event) -> bool:
             logging.info(f"select the {ordinal(i + 1)} arena has been selected")
             send_text(f"选择了倒数第{i + 1}个竞技场，于{style_time}")
 
-            hover_dialog(fullscreen_image)
-
-            # the following warning logic is only suitable for start_auto_select_arena
-            before_starting_arena_warning_time = 5
-            logging.info(f"start arena in {before_starting_arena_warning_time} seconds, please get ready")
-            send_text(f"将在{before_starting_arena_warning_time}秒内开始竞技场，请准备")
-            time.sleep(before_starting_arena_warning_time)
-
-            click_dialog(fullscreen_image, report=False)
-            time.sleep(1)
+            hover_wait_and_click_arena(fullscreen_image)
             return True
 
     # no suitable arena
@@ -124,6 +115,18 @@ def _start_once_select_arena(event: threading.Event) -> bool:
     send_image(f"{arena_penal_image_path}")
     time.sleep(3)
     return False
+
+
+def hover_wait_and_click_arena(fullscreen_image):
+    hover_dialog(fullscreen_image)
+    # the following warning logic is only suitable for start_auto_select_arena
+    before_starting_arena_warning_time = 5
+    logging.info(f"start arena in {before_starting_arena_warning_time} seconds, please get ready")
+    send_text(f"将在{before_starting_arena_warning_time}秒内开始竞技场，请准备")
+    time.sleep(before_starting_arena_warning_time)
+    click_dialog(fullscreen_image, report=False)
+    time.sleep(1.5)
+    return
 
 
 def start_auto_select_arena(event: threading.Event) -> None:
