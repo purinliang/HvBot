@@ -1,6 +1,7 @@
 import logging
 
-from hv_bot.external_communication_controller import send_text
+import hv_bot.gui.gui_execute
+from hv_bot.external_communication_controller import send_text, send_image
 from hv_bot.identify.character import Character
 from hv_bot.identify.monster_list import MonsterList
 from hv_bot.strategy import lowest_level_strategy_common, mid_level_strategy_common, low_level_strategy_boss
@@ -127,9 +128,20 @@ def battle_with_ultimates(character: Character, monster_list: MonsterList) -> di
     return _battle_with_few_dangerous_bosses(character, monster_list, "min_hp")
 
 
+# TODO test code
+BATTLE_WITH_DRAGONS_SEND_COUNT = 2
+
+
 def battle_with_dragons(character: Character, monster_list: MonsterList) -> dict:
     if not monster_list.have_dragon():
         return {}
-    logging.debug(f"battle_with_dragons")
-    send_text(f"battle_with_dragons")
+    # TODO debug
+    logging.info(f"battle_with_dragons")
+
+    global BATTLE_WITH_DRAGONS_SEND_COUNT
+    if BATTLE_WITH_DRAGONS_SEND_COUNT > 0:
+        send_text(f"battle_with_dragons")
+        dragon_image = hv_bot.gui.gui_execute.save_fullscreen_image("dragon")
+        send_image(dragon_image)
+        BATTLE_WITH_DRAGONS_SEND_COUNT -= 1
     return _battle_with_few_dangerous_bosses(character, monster_list, "min_hp")
