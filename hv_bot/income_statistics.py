@@ -52,7 +52,7 @@ def open_finish_images(style_time: str = ""):
                                    "Mana Draught", "Mana Potion", "Mana Elixir",
                                    "Spirit Draught", "Spirit Potion", "Spirit Elixir",
                                    "Monster Edibles", "Monster Chow", "Monster Cuisine",
-                                   "Happy Pills", "Featherweight Shard", "Voidseeker Shard", "Amnesia Shard"]
+                                   "Happy Pills"]
                 or drop_item_name.count("Scroll")
                 or drop_item_name.count("Infusion"))
 
@@ -64,30 +64,35 @@ def open_finish_images(style_time: str = ""):
                 or drop_item_name.count("Peerless"))
 
     def _is_other_valuable_item(drop_item_name: str):
-        return drop_item_name in ["Crystals", "Soul Fragments", "Token of Blood", "Credits", "Precursor Artifact"]
+        return drop_item_name in ["Crystals", "Soul Fragments", "Token of Blood", "Credits", "Precursor Artifact",
+                                  "Featherweight Shard", "Voidseeker Shard", "Amnesia Shard"]
 
     def _is_other_ignore_item(drop_item_name: str):
         return drop_item_name in ["EXP", "Chaos Token"]
 
     filtered_dict_drop_sum_up = {}
+    unfiltered_dict_drop_sum_up = {}
     for name, num_int in dict_drops_sum_up.items():
         if _is_trophies(name) or _is_other_valuable_item(name):
-            if name not in filtered_dict_drop_sum_up:
-                filtered_dict_drop_sum_up[name] = 0
-            filtered_dict_drop_sum_up[name] += num_int
-        elif (_is_less_equipment(name) or _is_better_equipment(name)
-              or _is_consumables(name) or _is_other_ignore_item(name)):
+            filtered_dict_drop_sum_up[name] = num_int
+        elif _is_less_equipment(name) or _is_better_equipment(name):
+            continue
+        elif _is_consumables(name) or _is_other_ignore_item(name):
+            unfiltered_dict_drop_sum_up[name] = num_int
             continue
         else:
             logging.warning(f"unknown item type={name}")
+            unfiltered_dict_drop_sum_up[name] = num_int
 
     logging.debug(f"filtered_dict_drop_sum_up={filtered_dict_drop_sum_up}")
+    logging.info(f"unfiltered_dict_drop_sum_up={unfiltered_dict_drop_sum_up}")
 
     price_dict = {
         "Crystals": 1.2,
         "Credits": 1,
         "Soul Fragments": 1000,
         "Token of Blood": 10000,
+
         "Mithra’s Flower": 1400,
         "ManBearPig Tail": 1400,
         "Holy Hand Grenade of Antioch": 1400,
@@ -97,7 +102,12 @@ def open_finish_images(style_time: str = ""):
         "Broken Glasses": 1400,
         "Hinamatsuri Doll": 1400,
         "Sapling": 4500,
-        "Precursor Artifact": 6500
+
+        "Precursor Artifact": 6500,
+
+        "Featherweight Shard": 100,
+        "Voidseeker Shard": 100,
+        "Amnesia Shard": 7500,
     }
 
     sum_price = 0
