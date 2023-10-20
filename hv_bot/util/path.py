@@ -8,7 +8,7 @@ import hv_bot.util.logger
 ROOT_PATH = Path(__file__).parent.parent
 
 
-def get_saves_dir_path() -> str:
+def get_saves_dir_path(style_time: str = "") -> str:
     # TODO remove all os.chdir, this action should not be execute in multithreading
     os.chdir(ROOT_PATH)
 
@@ -17,17 +17,18 @@ def get_saves_dir_path() -> str:
         os.makedirs(user_data_path)
     # os.chdir(user_data_path)
 
-    current_time = int(time.time())
-    # sample time format: "%Y-%m-%d %H:%M:%S"
-    style_time = time.strftime("%m%d", time.localtime(current_time))
+    if not style_time:
+        current_time = int(time.time())
+        # sample time format: "%Y-%m-%d %H:%M:%S"
+        style_time = time.strftime("%m%d", time.localtime(current_time))
 
     saves_path = os.path.join(user_data_path, f"saves_{style_time}")
     if not os.path.exists(saves_path):
         os.makedirs(saves_path)
     # os.chdir(saves_path)
 
-    cwd = os.getcwd()
-    logging.warning(f"cwd={cwd}")
+    # cwd = os.getcwd()
+    # logging.info(f"cwd={cwd}")
     return saves_path
 
 
