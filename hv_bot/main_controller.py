@@ -61,8 +61,8 @@ def main(event: threading.Event, from_queue: Queue, to_queue: Queue) -> None:
     external_communication_controller.set_to_queue(to_queue)
 
     logger.init_logger()
-    logging.info(f"main_controller main start")
-    send_text(f"主控制器启动")  # TODO translate to English
+    logging.info(f"main_controller main start, v0.3.0.5")
+    send_text(f"主控制器启动，v0.3.0.5")  # TODO translate to English
 
     while True:
         time.sleep(0.5)
