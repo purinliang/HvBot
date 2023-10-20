@@ -7,13 +7,19 @@ from PIL import Image
 
 import hv_bot.util.path
 from hv_bot.external_communication_controller import send_text, send_image
-from hv_bot.gui.gui_execute import have_image, locate_image_and_click, save_fullscreen_image
+from hv_bot.gui.gui_execute import have_image, locate_image_and_click, save_fullscreen_image, locate_image
 
 
 def detected_finish(fullscreen_image: Image) -> bool:
     os.chdir(hv_bot.util.path.ROOT_PATH)
     needle_image = Image.open("res\\finish_battle_button.png")
     return have_image(needle_image, fullscreen_image)
+
+
+def locate_finish_button(fullscreen_image: Image):
+    os.chdir(hv_bot.util.path.ROOT_PATH)
+    needle_image = Image.open("res\\finish_battle_button.png")
+    return locate_image(needle_image, fullscreen_image)
 
 
 def click_finish_button(fullscreen_image: Image) -> None:
