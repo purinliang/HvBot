@@ -234,5 +234,5 @@ def parse_drops(fullscreen_image: Image):
 
 if __name__ == "__main__":
     logger.init_logger()
-    for style_time in ["1018", "1019", "1020", "1021"]:
+    for style_time in ["1018", "1019", "1020", "1021", "1022"]:
         open_finish_images(style_time)
