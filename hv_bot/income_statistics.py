@@ -185,6 +185,9 @@ def parse_drops(fullscreen_image: Image):
             text = text[1:]
         while not text[-1:].isalnum():
             text = text[:-1]
+            ''
+        if text.endswith("heavy armor") or text.endswith("one-handed weapon"):
+            break
 
         if text.startswith("Ix"):
             text = text.replace("Ix", "1x", 1)
@@ -204,6 +207,7 @@ def parse_drops(fullscreen_image: Image):
         text = text.replace("Elicr", "Elixir")
         text = text.replace("Elibdr", "Elixir")
         text = text.replace("Eltdr", "Elixir")
+        text = text.replace("Elitdr", "Elixir")
         text = text.replace("Tokens of Blood", "Token of Blood")
         text = text.replace("Hinamatsun", "Hinamatsuri")
 
@@ -234,5 +238,5 @@ def parse_drops(fullscreen_image: Image):
 
 if __name__ == "__main__":
     logger.init_logger()
-    for style_time in ["1018", "1019", "1020", "1021", "1022"]:
+    for style_time in ["1018", "1019", "1020", "1021", "1022", "1023"]:
         open_finish_images(style_time)
