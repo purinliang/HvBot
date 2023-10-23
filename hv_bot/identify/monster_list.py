@@ -153,7 +153,7 @@ def crop_round_image(fullscreen_image: Image, monster_count: int):
 
 
 def get_monster_list(fullscreen_image: Image, *, ocr_round_count=False, round_count: int,
-                     sum_round: int) -> MonsterList:
+                     sum_round: int) -> MonsterList | None:
     """
     Get monster list by fullscreen image
     :param fullscreen_image:
@@ -187,6 +187,9 @@ def get_monster_list(fullscreen_image: Image, *, ocr_round_count=False, round_co
 
     # After knowing the value of round_count and sum_round, some info should be updated
     monster_list.update_round_info()
+
+    if not monster_list.monsters:
+        return None
 
     return monster_list
 
