@@ -34,4 +34,6 @@ if __name__ == "__main__":
     logging.info("Oct 21st:")
     calc_stamina_cost_penalty(81 + 7, 55, 465)
     logging.info("Oct 22nd:")
-    calc_stamina_cost_penalty(81 + 3, 61, 170)
+    calc_stamina_cost_penalty(71 + 3, 61, 170)
+    logging.info("Oct 23rd:")
+    calc_stamina_cost_penalty(71 + 12, 63, 255)
