@@ -169,14 +169,14 @@ CHARACTER_SUB_MENU_BUTTON_X = 58
 CHARACTER_SUB_MENU_BUTTON_Y = 46
 
 
-def _back_to_main_page() -> None:
-    logging.info(f"back_to_main_page")
-    send_text(f"回到主页面")
-    move_and_hover(CHARACTER_MAIN_MENU_BUTTON_X, CHARACTER_MAIN_MENU_BUTTON_Y,
-                   move_duration=0.5, hover_duration=0.75)
-    move_and_click(CHARACTER_SUB_MENU_BUTTON_X, CHARACTER_SUB_MENU_BUTTON_Y,
-                   move_duration=0.5, ending_wait_duration=0.75)
-    return
+# def _back_to_main_page() -> None:
+#     logging.info(f"back_to_main_page")
+#     send_text(f"回到主页面")
+#     move_and_hover(CHARACTER_MAIN_MENU_BUTTON_X, CHARACTER_MAIN_MENU_BUTTON_Y,
+#                    move_duration=0.5, hover_duration=0.75)
+#     move_and_click(CHARACTER_SUB_MENU_BUTTON_X, CHARACTER_SUB_MENU_BUTTON_Y,
+#                    move_duration=0.5, ending_wait_duration=0.75)
+#     return
 
 
 def _sleep_for_long_time(sleeping_time: int, event: threading.Event) -> None:
@@ -307,8 +307,8 @@ def _start_once_select_encounter(event: threading.Event) -> None:
         _start_battle_encounter(event)
         time.sleep(2)
 
-        _back_to_main_page()
-        time.sleep(2)
+        # _back_to_main_page()
+        # time.sleep(2)
         break
 
     return
@@ -397,8 +397,8 @@ def _start_auto_select_encounter(event: threading.Event) -> None:
         _start_battle_encounter(event)
         time.sleep(2)
 
-        _back_to_main_page()
-        time.sleep(2)
+        # _back_to_main_page()
+        # time.sleep(2)
         continue
 
     return
