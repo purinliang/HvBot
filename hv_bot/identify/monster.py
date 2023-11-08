@@ -32,6 +32,7 @@ class Monster:
             self.hp, self.mp, self.sp = get_xps_from_monster_image(monster_image)
             self.status_list = get_status_list(monster_image)
             self.boss_tag = judge_boss_by_monster_image(monster_image)
+            # Notice that boss_tag = "DRAGON" will be assigned somewhere else
 
     def __str__(self):
         result = f" index={num_index_to_letter_index(self.index)} "
@@ -58,6 +59,9 @@ class Monster:
 
     def is_yggdrasil(self) -> bool:
         return self.boss_tag == "YGGDRASIL"
+
+    def is_dragon(self) -> bool:
+        return self.boss_tag == "DRAGON"
 
     def have_status(self, status_name: str) -> bool:
         return self.status_list.count(status_name) > 0 or self.status_list.count("auto_" + status_name) > 0

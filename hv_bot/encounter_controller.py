@@ -7,6 +7,7 @@ import pyautogui
 from PIL import Image
 
 from hv_bot.external_communication_controller import send_text
+from hv_bot.gui import gui_battle_continue
 from hv_bot.gui.gui_captcha import detected_captcha, handle_captcha
 from hv_bot.gui.gui_dialog import detected_dialog, click_dialog
 from hv_bot.gui.gui_execute import move_and_hover, move_and_click, get_fullscreen_image, move_relatively_and_hover
@@ -300,6 +301,13 @@ def _start_auto_select_encounter(event: threading.Event) -> None:
     """
     logging.info(f"start_auto_select_encounter")
     send_text(f"开始连续选择遭遇战")
+
+    if gui_battle_continue.is_battling():
+        time.sleep(1)
+        logging.info(f"the previous battle hasn't ended, battle_continue")
+        send_text(f"上次战斗尚未结束，继续战斗")
+        _start_battle_encounter(event)
+
     while True:
         if event.is_set():
             # main thread is requiring to stop

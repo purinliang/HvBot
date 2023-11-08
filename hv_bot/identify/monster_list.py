@@ -1,4 +1,5 @@
 import logging
+from typing import List
 
 from PIL import Image
 
@@ -18,7 +19,7 @@ MONSTER_HEIGHT_DIFFERENCE = 58
 class MonsterList:
 
     def __init__(self):
-        self.monsters = []
+        self.monsters: List[Monster] = []
         self.round_count = 0
         self.sum_round = 0
 
@@ -61,6 +62,13 @@ class MonsterList:
         """
         return any([(not monster.dead and monster.is_ultimate()) for monster in self.monsters])
 
+    def have_dragon(self) -> bool:
+        """
+        have any dragon?
+        :return: True or False
+        """
+        return any([(not monster.dead and monster.is_dragon()) for monster in self.monsters])
+
     @classmethod
     def number_index_to_letter_index(cls, index: int) -> str:
         """
@@ -93,6 +101,23 @@ class MonsterList:
             if monster.is_yggdrasil():
                 return monster.index
         return -1
+
+    def update_round_info(self) -> None:
+        """
+        After knowing the value of round_count and sum_round, some info should be updated
+        """
+
+        def is_dragon_round() -> bool:
+            if self.sum_round != 90 or self.round_count <= 85:
+                return False
+            return len(self.monsters) <= 3
+
+        if is_dragon_round():
+            for monster in self.monsters:
+                if monster.boss_tag == "":
+                    monster.boss_tag = "DRAGON"
+
+        return
 
 
 def crop_monster_image(fullscreen_image: Image, monster_index: int):
@@ -127,11 +152,14 @@ def crop_round_image(fullscreen_image: Image, monster_count: int):
     return round_image
 
 
-def get_monster_list(fullscreen_image: Image, *, ocr_round_count=False) -> MonsterList:
+def get_monster_list(fullscreen_image: Image, *, ocr_round_count=False, round_count: int,
+                     sum_round: int) -> MonsterList | None:
     """
     Get monster list by fullscreen image
-    :param ocr_round_count:
     :param fullscreen_image:
+    :param ocr_round_count:
+    :param round_count:
+    :param sum_round:
     :return:
     """
     MONSTER_COUNT_LIMITATION = 10
@@ -152,18 +180,32 @@ def get_monster_list(fullscreen_image: Image, *, ocr_round_count=False) -> Monst
         # round_count attend below the last monster
         round_image = crop_round_image(fullscreen_image, len(monsters))
         # round_image.show()
-        text = ocr_single_line_text(round_image)
-        logging.warning(f"ocr_round_count: text={text}")
-        if text.startswith("Round "):
-            text = text.removeprefix("Round ")
-            round_count, sum_round = 0, 0
-            try:
-                round_count, sum_round = map(int, text.split("/"))
-            except ValueError as error:
-                logging.error(error)
-            if round_count > 0 and sum_round > 0:
-                monster_list.round_count = round_count
-                monster_list.sum_round = sum_round
-                logging.warning(f"ocr_round_count: round_count/sum_round={round_count}/{sum_round}")
+        round_count, sum_round = ocr_round_count_and_sum_round(round_image, round_count, sum_round)
+
+    monster_list.round_count = round_count
+    monster_list.sum_round = sum_round
+
+    # After knowing the value of round_count and sum_round, some info should be updated
+    monster_list.update_round_info()
+
+    if not monster_list.monsters:
+        return None
 
     return monster_list
+
+
+def ocr_round_count_and_sum_round(round_image: Image, round_count: int, sum_round: int) -> [int, int]:
+    text = ocr_single_line_text(round_image)
+    logging.warning(f"ocr_round_count: text={text}")
+    if text.startswith("Round "):
+        text = text.removeprefix("Round ")
+        new_round_count, new_sum_round = 0, 0
+        try:
+            new_round_count, new_sum_round = map(int, text.split("/"))
+        except ValueError as error:
+            logging.error(error)
+        if new_round_count > 0 and new_sum_round > 0:
+            round_count = new_round_count
+            sum_round = new_round_count
+            logging.warning(f"ocr_round_count: round_count/sum_round={round_count}/{sum_round}")
+    return round_count, sum_round

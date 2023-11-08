@@ -102,6 +102,27 @@ def get_boss_spell_target_index_for_yggdrasil(monster_list: MonsterList, spell_n
     return -1
 
 
+def get_boss_spell_target_index_for_dragon(monster_list: MonsterList, spell_name) -> int:
+    """
+    get_boss_spell_target_index_for_dragon
+    :param monster_list:
+    :param spell_name:
+    :return:
+    """
+    dragon_list: List[Monster] = [monster for monster in monster_list.monsters
+                                  if not monster.dead and monster.is_dragon()]
+    if len(dragon_list) == 0:
+        return -1
+
+    if spell_name in ["weaken", "silence", "imperil"]:
+        return get_boss_spell_target_index_for_debuff_spell(monster_list, dragon_list, spell_name)
+    if spell_name in ["vital_strike", "attack", "shield_bash"]:
+        return get_boss_spell_target_index_for_damage_spell(monster_list, dragon_list, spell_name)
+
+    logging.warning(f"not supportive spell_name={spell_name}")
+    return -1
+
+
 def get_boss_spell_target_index_for_debuff_spell(monster_list: MonsterList, boss_list: List[Monster],
                                                  spell_name: str) -> int:
     """
@@ -189,6 +210,9 @@ def get_boss_spell_target_index(monster_list: MonsterList, spell_name) -> int:
     :param spell_name:
     :return: the target's index
     """
+    index = get_boss_spell_target_index_for_dragon(monster_list, spell_name)
+    if index != -1:
+        return index
     index = get_boss_spell_target_index_for_yggdrasil(monster_list, spell_name)
     if index != -1:
         return index

@@ -120,7 +120,7 @@ def get_exp(fullscreen_image: Image) -> float:
     return exp
 
 
-def get_character(fullscreen_image: Image) -> Character:
+def get_character(fullscreen_image: Image) -> Character | None:
     character = Character()
 
     hp, mp, sp, cp = get_xps_from_xp_bar_image(crop_xp_bar_image(fullscreen_image))
@@ -134,4 +134,7 @@ def get_character(fullscreen_image: Image) -> Character:
     character.gem = calc_gem_status(fullscreen_image)
 
     character.exp = get_exp(fullscreen_image)
+
+    if hp <= 0.001 or (not character.status_list and not character.consumable_list):
+        return None
     return character
