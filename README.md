@@ -144,19 +144,19 @@ In addition, there are a lot of features to develop and some bugs to fix.
 
 ### Development History
 
-#### v0.3.1.1 [Nov. 8th, 2023]
+#### v0.3.1.1(release) [Nov. 8th, 2023]
 
 - All Test passed.
-- The issues remained in v0.3.1.0 have been fixed.
+
+- Fixed issues:
+   - When start arena or encounter, sometimes the program will be idle.
+   - When encounter dawn_event, the program will be idle.
+   - When battle finish, sometimes the mouse will select the finish_button make its color turn into blue, leading the
+     program can not identify to finish button, and the program will be idle.
+   - When parse encounter_text fail, the program send too many error reporting texts.
 
 #### v0.3.1.0 [Oct. 24th, 2023]
 
-- Remained issues:
-    - When start arena or encounter, sometimes the program will be idle.
-    - When encounter dawn_event, the program will be idle.
-    - When battle finish, sometimes the mouse will select the finish_button make its color turn into blue, leading the
-      program can not identify to finish button, and the program will be idle.
-    - When parse encounter_text fail, the program send too many error reporting texts.
 - New features:
     - Battle_with_dragons: Now the program can identify special dragon bosses and use specific strategy to battle with
       them.
@@ -166,3 +166,37 @@ In addition, there are a lot of features to develop and some bugs to fix.
       be run manually.
     - Stamina_statistics: Now the program can calc the stamina cost penalty rate. But it needs to
       be run manually.
+
+#### v0.3.0.5  [Oct. 19th, 2023] 
+
+- Fixed issues:
+    - When meeting captcha, report too much text to AriaBot.
+    - Before clicking start_encounter or start_arena, wait some seconds.
+    - Fix the arena_round_info sending logic
+    - Fix the limitation of waiting captcha answer
+
+- New features:
+    - Now can calc stamina cost penalty manually 
+
+#### v0.3.0.4 (released)  [Oct. 18th, 2023] 
+
+- Fixed issues:
+    - When submitting captcha, if the checkbox of twilight sparkle is checked, the bot will misjudge that the captcha
+      has been submitted.
+    - When receiving command "/hv screenshot", thread main_controller will os.chdir, while battle thread also os.chdir
+      at the same time, sometimes it will lead to one of them threads crash. it seems like cannot send screenshot and
+      send text anymore (main_controller crash) or battle is stopped (battle crash).
+
+#### v0.3.0.3 [Oct. 18th, 2023]
+  
+- Fixed issues:
+    - Before confirming the dialog when selecting an arena, there is no waiting time.
+    - Only use debuff to the first position.
+
+#### v0.3.0.2 [Oct. 16th, 2023]
+
+- Refactor HvBot v0.2, updating to v0.3
+
+- Redesign the structure of the project
+
+- Translate most comments to English
