@@ -25,9 +25,8 @@ a shield.
     - **DP:** Used for casting Weapon Skills (more details in the "Weapon Skills" section).
 
 - **Spells:** Spells in the game can be supportive, providing positive buffs to the character, or deprecating,
-  inflicting
-  negative debuffs on monsters. There are also spells that deal damage to monsters, but they are not useful for warrior
-  characters.
+  inflicting negative debuffs on monsters. There are also spells that deal damage to monsters, but they are not useful
+  for warrior characters.
 
 - **Weapon Skills:** Warrior characters can use special Weapon Skills that allow them to deal significant damage to
   monsters.
@@ -61,7 +60,6 @@ significant damage and pose a real threat to your character.
 You can run HvBot independently by double-clicking on the scripts:
 
 - arena_controller.py or encounter_controller.py to automatically engage in battles.
-
 - income_statistics.py or stamina_statistics.py for data analysis purposes.
 
 ### Run with AriaBot
@@ -87,142 +85,138 @@ Telegram bot **@ArcticAriaBot**.
 Here are all the commands that can be used with AriaBot:
 
 1. `/hv help`
-
     - The command `/hv help` displays the help text, which includes a list of commands that can be used with
       AriaBot, along with their corresponding functions.
 
 2. `/hv auto arena`
-
     - The command `/hv auto arena` automatically selects the latest arena from the arena selection panel.
-
     - The bot will check if a random encounter battle is ready. If true, it will prioritize tackling the random
       encounter battle first.
-
     - The routine of selecting the arena and initiating the automatic battle will be executed twice.
         - However, if the command is executed while a previous battle is still in progress, the bot will continue with
           the previous battle in "arena battle mode," as part of the normal routine mentioned above.
 
 3. `/hv auto encounter`
-
     - The command `/hv auto encounter` automatically selects the random encounter battle and waits for the next one to
       occur.
-
     - To prevent the computer or monitor from automatically shutting down during the wait for the next random encounter
       battle, the bot will periodically move the mouse randomly.
 
 4. `/hv once encounter`
-
     - The command `/hv once encounter` automatically selects the random encounter battle but does not wait for the next
       one. Instead, the bot will exit immediately.
 
 5. `/hv arena`
-
     - The command `/hv arena` automatically continues a battle in "arena mode".
 
 6. `/hv encounter`
-
     - The command `/hv encounter` automatically continues a battle in "random encounter mode".
 
 7. `/hv help`
-
     - The command `/hv help` outputs the help text, which includes a list of commands that can be used with AriaBot and
       their corresponding functions. (Already mentioned above)
 
 8. `/hv screenshot`
-
     - The command `/hv screenshot` instructs the bot to capture a screenshot and send it through AriaBot.
-
         - This command is useful for monitoring the running status, checking for bugs, and saving the current situation
           as a test case.
-
         - Screenshots of situation that cause bugs can be used to verify whether the new version of the bot can handle
           the issue correctly.
 
 9. `/hv close`
-
     - The command `/hv close` instructs the bot to close itself. This command can be useful in situations where the bot
       is running incorrectly and needs to be interrupted. Additionally, it can be used to close the bot and save power
       on the computer.
 
 ### Attention
 
-In addition, there are a lot of features to develop and some bugs to fix.
+Please be aware that HvBot has several features under development and may contain some bugs that need to be addressed.
 
-- HvBot will **fully control** your mouse, to stop it, move your mouse quickly to one of the 4 corners of your screen.
-
-- Sometimes HvBot may crash, so run in **process mode** is preferable, rather than thread mode.
+- HvBot will have full control over your mouse during its operation. To stop HvBot, you can quickly move your mouse to
+  one of the four corners of your screen.
+- It is recommended to run HvBot in process mode rather than thread mode to minimize the risk of crashes.
 
 ## Project Description
 
-### Project Structure
+The project is structured as follows:
 
-- Controllers
-    - Main Controller
-    - Arena Controller
-    - Encounter Controller
-- GUI: The interface that between HvBot's main control program and PyAutoGUI library.
-- Identify: To Identify the graph and get corresponding information.
-    - Identify.Character
-    - Identify.Monster
-- Strategy
-    - Deterrent
-- Util
+### Controllers
+
+- Main Controller: Responsible for the overall control and coordination of HvBot's operations.
+- Arena Controller: Handles operations related to the arena battles.
+- Encounter Controller: Manages operations related to random encounter battles.
+
+### GUI
+
+The GUI module serves as the interface between HvBot's main control program and the PyAutoGUI library. It facilitates
+interaction and communication with the graphical elements of the game.
+
+### Identify
+
+The Identify module is responsible for identifying various elements within the game's graphics and extracting relevant
+information.
+
+- Identify.Character: Handles the identification and retrieval of information related to characters in the game.
+- Identify.Monster: Deals with the identification and extraction of information regarding monsters in the game.
+
+### Strategy
+
+The Strategy module contains different strategies that HvBot can employ during battles.
+
+### Util
+
+The Util module includes utility functions and helpers that support various functionalities within HvBot.
 
 ### Development History
 
-#### v0.3.1.1(release) [Nov. 8th, 2023]
+#### v0.3.1.1 (release) [Nov. 8th, 2023]
 
-- All Test passed.
-
+- All tests have passed successfully.
 - Fixed issues:
-    - When start arena or encounter, sometimes the program will be idle.
-    - When encounter dawn_event, the program will be idle.
-    - When battle finish, sometimes the mouse will select the finish_button make its color turn into blue, leading the
-      program can not identify to finish button, and the program will be idle.
-    - When parse encounter_text fail, the program send too many error reporting texts.
+    - Resolved an issue where the program would occasionally become idle when starting an arena or encounter battle.
+    - Fixed an issue where the program would become idle during the "dawn_event" encounter.
+    - Addressed a problem where, after a battle finishes, the program would sometimes fail to identify the finish
+      button. This occurred when the mouse inadvertently selected the finish button, causing its color to turn blue and
+      preventing the program from recognizing it. As a result, the program would become idle.
+    - Reduced the number of error reporting texts sent when encountering a failure to parse encounter text.
 
 #### v0.3.1.0 [Oct. 24th, 2023]
 
 - New features:
-    - Battle_with_dragons: Now the program can identify special dragon bosses and use specific strategy to battle with
-      them.
-    - Battle_continue: Now auto_arena and auto_encounter command can identify the status that the previous battle is not
-      finished, and automatically continue the battle.
-    - Income_statistics: Now the program can analysis the finish panel screenshot to calc income by OCR. But it needs to
-      be run manually.
-    - Stamina_statistics: Now the program can calc the stamina cost penalty rate. But it needs to
-      be run manually.
+    - Battle_with_dragons: The program can now identify special dragon bosses and utilize specific strategies to battle
+      against them.
+    - Battle_continue: The auto_arena and auto_encounter commands can now identify if the previous battle was not
+      finished and automatically continue from where it left off.
+    - Income_statistics: The program can now analyze the finish panel screenshot to calculate income using OCR (Optical
+      Character Recognition). However, this feature needs to be run manually.
+    - Stamina_statistics: The program can now calculate the stamina cost penalty rate. This feature also needs to be run
+      manually.
 
 #### v0.3.0.5  [Oct. 19th, 2023]
 
 - Fixed issues:
-    - When meeting captcha, report too much text to AriaBot.
-    - Before clicking start_encounter or start_arena, wait some seconds.
-    - Fix the arena_round_info sending logic
-    - Fix the limitation of waiting captcha answer
+    - Resolved an issue where the program would report excessive text to AriaBot when encountering a captcha.
+    - Implemented a delay before clicking the start_encounter or start_arena button to allow for proper initialization.
+    - Fixed the logic for sending arena_round_info.
+    - Fixed the limitation on waiting for the captcha answer.
 
-- New features:
-    - Now can calc stamina cost penalty manually
-
-#### v0.3.0.4 (released)  [Oct. 18th, 2023]
+#### v0.3.0.4 (release) [Oct. 18th, 2023]
 
 - Fixed issues:
-    - When submitting captcha, if the checkbox of twilight sparkle is checked, the bot will misjudge that the captcha
-      has been submitted.
-    - When receiving command "/hv screenshot", thread main_controller will os.chdir, while battle thread also os.chdir
-      at the same time, sometimes it will lead to one of them threads crash. it seems like cannot send screenshot and
-      send text anymore (main_controller crash) or battle is stopped (battle crash).
+    - Resolved an issue where the bot would misjudge the submission of a captcha if the checkbox of "Twilight Sparkle"
+      was checked.
+    - Addressed a problem where the main_controller thread and the battle thread would simultaneously execute os.chdir,
+      leading to crashes. This resulted in the inability to send screenshots and text (main_controller crash) or the
+      stoppage of the battle (battle crash).
 
 #### v0.3.0.3 [Oct. 18th, 2023]
 
 - Fixed issues:
-    - Before confirming the dialog when selecting an arena, there is no waiting time.
-    - Only use debuff to the first position.
+    - Implemented a waiting time before confirming the dialog when selecting an arena.
+    - Resolved the issue where debuffs were only applied to the monster placed in the first position.
 
 #### v0.3.0.2 [Oct. 16th, 2023]
 
-- Refactor HvBot v0.2, updating to v0.3
-
-- Redesign the structure of the project
-
-- Translate most comments to English
+- Refactored HvBot from v0.2 to v0.3.
+- Redesigned the project structure.
+- Translated most comments to English.
