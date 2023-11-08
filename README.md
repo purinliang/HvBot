@@ -27,4 +27,27 @@ In addition, there are a lot of features to develop and some bugs to fix.
 
 ### Development History
 
+#### v0.3.1.0 [Oct. 24th, 2023]
 
+- Remained issues:
+
+    - When start arena or encounter, sometimes the program will be idle.
+    - When encounter dawn_event, the program will be idle.
+    - When battle finish, sometimes the mouse will select the finish_button make its color turn into blue, leading the
+      program can not identify to finish button, and the program will be idle.
+    - When parse encounter_text fail, the program send too many error reporting texts.
+
+- All tests passed
+
+- Ready to test
+
+- New features:
+
+    - Battle_with_dragons: Now the program can identify special dragon bosses and use specific strategy to battle with
+      them.
+    - Battle_continue: Now auto_arena and auto_encounter command can identify the status that the previous battle is not
+      finished, and automatically continue the battle.
+    - Income_statistics: Now the program can analysis the finish panel screenshot to calc income by OCR. But it needs to
+      be run manually.
+    - Stamina_statistics: Now the program can calc the stamina cost penalty rate. But it needs to
+      be run manually.
