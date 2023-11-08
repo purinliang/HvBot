@@ -173,30 +173,30 @@ def get_boss_spell_target_index_for_damage_spell(monster_list: MonsterList, boss
         lowest_level_strategy_common.deterrent_of_position, monster_list=monster_list, spell_name=spell_name)
 
     if spell_name in ["vital_strike"]:
-        boss_shocked_list = [boss for boss in boss_list
-                             if boss.have_status("shocked")]
-        # no such "shocked" boss
-        if len(boss_shocked_list) == 0:
+        boss_stunned_list = [boss for boss in boss_list
+                             if boss.have_status("stunned")]
+        # no such "stunned" boss
+        if len(boss_stunned_list) == 0:
             return -1
 
         # choose the one has the least hp
-        min_hp_boss = min(boss_shocked_list, key=lambda boss: boss.hp)
+        min_hp_boss = min(boss_stunned_list, key=lambda boss: boss.hp)
         return min_hp_boss.index
     if spell_name in ["attack", "orbital_friendship_cannon"]:
         # normal attack or "orbital_friendship_cannon" should choose the one has the least hp
         min_hp_boss = min(boss_list, key=lambda boss: boss.hp)
         return min_hp_boss.index
     if spell_name in ["shield_bash"]:
-        # "shield_bash" should choose the one is not "shocked"
+        # "shield_bash" should choose the one is not "stunned"
         # if there are multiple choices, choose the most deterrent one
-        boss_not_shocked_list = [boss for boss in boss_list
-                                 if not boss.have_status("shocked")]
-        # no such "shocked" boss
-        if len(boss_not_shocked_list) == 0:
+        boss_not_stunned_list = [boss for boss in boss_list
+                                 if not boss.have_status("stunned")]
+        # no such "stunned" boss
+        if len(boss_not_stunned_list) == 0:
             return -1
 
         # choose the one has most deterrent
-        max_deterrent_boss = max(boss_not_shocked_list, key=deterrent_of_position_spell_name)
+        max_deterrent_boss = max(boss_not_stunned_list, key=deterrent_of_position_spell_name)
         return max_deterrent_boss.index
 
     logging.warning(f"not supportive spell_name={spell_name}")

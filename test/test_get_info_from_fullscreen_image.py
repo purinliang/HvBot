@@ -62,7 +62,7 @@ class MyTestCase(unittest.TestCase):
         self.assertFalse(monster_list.have_boss())
         self.assertTrue(len(monster_list.monsters[0].status_list) == 0)
         self.assertTrue(len(monster_list.monsters[1].status_list) == 1)
-        self.assertTrue(monster_list.monsters[1].have_status("shocked") == 1)
+        self.assertTrue(monster_list.monsters[1].have_status("stunned") == 1)
 
     def test_get_info_from_fullscreen_image_4(self):
         fullscreen_image = Image.open(r"res\screenshot_1010_123441.png")
@@ -184,7 +184,7 @@ class MyTestCase(unittest.TestCase):
         self.assertTrue(len(monster_list.monsters[1].status_list) == 0)
         self.assertTrue(monster_list.monsters[1].is_school_girl())
         self.assertTrue(len(monster_list.monsters[5].status_list) == 1)
-        self.assertTrue(monster_list.monsters[5].have_status("shocked"))
+        self.assertTrue(monster_list.monsters[5].have_status("stunned"))
 
     def setUp(self) -> None:
         logger.init_logger()

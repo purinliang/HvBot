@@ -95,7 +95,7 @@ class Monster:
             deterrent *= 0.05
 
         # to a monster with some debuff, it may deal less damage
-        DEBUFF_CHECK_LIST = [["shocked", 0.875], ["silence", 0.225], ["weaken", 0.425]]
+        DEBUFF_CHECK_LIST = [["stunned", 0.875], ["silence", 0.225], ["weaken", 0.425]]
         for debuff, factor in DEBUFF_CHECK_LIST:
             if self.have_status(debuff):
                 # for a spell named in check_list, it should be calc twice, it is not a bug
@@ -163,7 +163,8 @@ def get_status(monster_image: Image, status_name: str) -> bool:
 
 
 def get_status_list(monster_image: Image) -> List[str]:
-    check_list = ["shocked", "silence", "imperil", "weaken", "absorb"]
+    # TODO silenceD, weakenED, imperilED, absorbED
+    check_list = ["stunned", "silence", "imperil", "weaken", "absorb", "searing_skin", "penetrated_armor"]
     status_list = []
     for status_name in check_list:
         attend = get_status(monster_image, status_name)
@@ -171,14 +172,14 @@ def get_status_list(monster_image: Image) -> List[str]:
             status_list.append(status_name)
 
     BACKGROUND_COLOR_DEFAULT = [237, 235, 223]
-    BACKGROUND_COLOR_SHOCKED = [143, 188, 143]
+    BACKGROUND_COLOR_STUNNED = [143, 188, 143]
     rgb_image = monster_image.convert("RGB")
     box_color = rgb_image.getpixel((304, 40))
     total_diff1 = 0
     total_diff2 = 0
     for c in range(3):
         total_diff1 += abs(BACKGROUND_COLOR_DEFAULT[c] - box_color[c])
-        total_diff2 += abs(BACKGROUND_COLOR_SHOCKED[c] - box_color[c])
+        total_diff2 += abs(BACKGROUND_COLOR_STUNNED[c] - box_color[c])
     if total_diff1 >= 10 and total_diff2 >= 10:
         status_list.append("too_many")
 
@@ -216,7 +217,7 @@ def judge_boss_by_monster_image(monster_image) -> str:
     # boss 230 204 163
     # schoolgirl 227 170 161 （存疑）
     # ultimate 169 137 165
-    # shocked 143 188 143
+    # stunned 143 188 143
 
     rgb_image = monster_image.convert("RGB")
     rgb_color = rgb_image.getpixel((8, 8))

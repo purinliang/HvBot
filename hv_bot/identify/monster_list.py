@@ -176,6 +176,9 @@ def get_monster_list(fullscreen_image: Image, *, ocr_round_count=False, round_co
     monster_list = MonsterList()
     monster_list.monsters = monsters
 
+    if not monster_list.monsters:
+        return None
+
     if ocr_round_count:
         # round_count attend below the last monster
         round_image = crop_round_image(fullscreen_image, len(monsters))
@@ -187,9 +190,6 @@ def get_monster_list(fullscreen_image: Image, *, ocr_round_count=False, round_co
 
     # After knowing the value of round_count and sum_round, some info should be updated
     monster_list.update_round_info()
-
-    if not monster_list.monsters:
-        return None
 
     return monster_list
 
@@ -206,6 +206,6 @@ def ocr_round_count_and_sum_round(round_image: Image, round_count: int, sum_roun
             logging.error(error)
         if new_round_count > 0 and new_sum_round > 0:
             round_count = new_round_count
-            sum_round = new_round_count
+            sum_round = new_sum_round
             logging.warning(f"ocr_round_count: round_count/sum_round={round_count}/{sum_round}")
     return round_count, sum_round
