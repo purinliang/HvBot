@@ -1,12 +1,8 @@
 # HvBot
 
-**latest testing version:** v0.3.1.1
-
-**latest stable version:** v0.3.1.0
-
-**author:** purinliang
-
-**author email:** purinliang@gmail.com
+- **Latest Stable Version:** v0.3.1.1
+- **Author:** purinliang
+- **Author Email:** purinliang@gmail.com
 
 ## Description
 
@@ -14,6 +10,38 @@ HvBot is a program that helps you to automate some actions when playing a less-k
 out-of-date RPG (Role-Playing Game) games, without colorful and vivid graphics but just like text-based RPG, but this
 feature makes it incredibly suitable for developing easy and simple automatically scripts, to learn and improve
 programming skills.
+
+## Game Description
+
+### Character
+
+The character you control, maybe have some job, for example warrior or magician. The latest version HvBot only works for
+warrior job, more specifically a warrior using one-handed weapon and a shield.
+
+- Basic status:
+    - HP: Health Points.
+    - MP: Magic Points. Used for casting spells, for more information, look Spells.
+    - SP: Spirit Points. Used for casting Weapon Skills, for more information, look Weapon Skills.
+    - CP: Used for casting Weapon Skills, for more information, look Weapon Skills.
+- Spells: Spells include supportive spells, which can give you some positive buffs. Or deprecating spells, which can
+  give monsters negative debuffs. Or the other spells that deal damage to monsters, but useless to warrior job.
+- Weapon Skills: Warrior job can use weapon skills, to deal vital damage to monsters.
+- Status: Mostly supportive buffs, which can enhance the power of character, including offensive and defensive.
+- Consumables: Character can use consumables to recover basic status, for example HP Potion for recovering 100% HP
+  immediately.
+
+### Monster
+
+The monsters you battle with, including normal monsters or bosses. Some bosses can deal huge damage, and they are really
+dangerous to character.
+
+- Basic status: Monsters have 3 types of basic status, including HP, MP and SP. MP and SP are used to cast spell,
+  dealing much more
+  damage than normal attack.
+- Status: The status monsters have, normally some debuffs you give to them. For example, "silenced" for cannot cast any
+  spells, "
+  weakened" for dealing less damage.
+- Boss: There are 4 types of bosses, including normal bosses, and special bosses.
 
 ## How to use
 
@@ -33,7 +61,7 @@ its sub-threads or sub-processes.
 AriaBot can start HvBot by command, and inspect the running status including automatically start arena or random
 encounter battle, or start battle with different strategy.
 
-#### Commands
+#### AriaBot Commands
 
 The following is all the commands that can be used by AriaBot:
 
@@ -98,32 +126,38 @@ In addition, there are a lot of features to develop and some bugs to fix.
 
 - Sometimes HvBot may crash, so run in **process mode** is preferable, rather than thread mode.
 
-## Development History
+## Project Description
+
+### Project Structure
+
+- Controllers
+    - Main Controller
+    - Arena Controller
+    - Encounter Controller
+- GUI: The interface that between HvBot's main control program and PyAutoGUI library.
+- Identify: To Identify the graph and get corresponding information.
+    - Identify.Character
+    - Identify.Monster
+- Strategy
+    - Deterrent
+- Util
+
+### Development History
 
 #### v0.3.1.1 [Nov. 8th, 2023]
 
-- Test passed: auto_encounter
-
-- Ready to test
-
+- All Test passed.
 - The issues remained in v0.3.1.0 have been fixed.
 
 #### v0.3.1.0 [Oct. 24th, 2023]
 
 - Remained issues:
-
     - When start arena or encounter, sometimes the program will be idle.
     - When encounter dawn_event, the program will be idle.
     - When battle finish, sometimes the mouse will select the finish_button make its color turn into blue, leading the
       program can not identify to finish button, and the program will be idle.
     - When parse encounter_text fail, the program send too many error reporting texts.
-
-- All tests passed
-
-- Ready to test
-
 - New features:
-
     - Battle_with_dragons: Now the program can identify special dragon bosses and use specific strategy to battle with
       them.
     - Battle_continue: Now auto_arena and auto_encounter command can identify the status that the previous battle is not
