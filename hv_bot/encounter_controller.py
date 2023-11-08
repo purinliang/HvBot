@@ -360,10 +360,11 @@ def _start_auto_select_encounter(event: threading.Event) -> None:
                 rest_minutes = int(rest_time_text.split(":")[0])
                 rest_seconds = int(rest_time_text.split(":")[1])
             except ValueError as error:
+                sleeping_time = 30
                 logging.error(error)
-                logging.error(f"failed to parse encounter rest time, retry")
-                send_text(f"解析遭遇战剩余时间失败，重试")
-                time.sleep(15)
+                logging.error(f"failed to parse encounter rest time, wait {sleeping_time} seconds")
+                send_text(f"解析遭遇战剩余时间失败，等待 {sleeping_time} 秒")
+                _sleep_for_long_time(sleeping_time, event)
                 continue
 
             # sleeping_time up to 15 minutes
