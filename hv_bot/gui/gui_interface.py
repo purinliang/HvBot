@@ -137,9 +137,13 @@ def get_info_from_fullscreen_image(fullscreen_image: Image, *, ocr_round_count=F
 
     character: Character = get_character(fullscreen_image)
     # logging.debug(character)
+    if character is None:
+        return None, None
     monster_list: MonsterList = get_monster_list(fullscreen_image, ocr_round_count=ocr_round_count,
                                                  round_count=round_count, sum_round=sum_round)
     # logging.debug(monster_list)
+    if monster_list is None:
+        return None, None
 
     return character, monster_list
 

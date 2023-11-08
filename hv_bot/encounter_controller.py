@@ -1,4 +1,5 @@
 import logging
+import os
 import random
 import threading
 import time
@@ -10,12 +11,14 @@ from hv_bot.external_communication_controller import send_text
 from hv_bot.gui import gui_battle_continue
 from hv_bot.gui.gui_captcha import detected_captcha, handle_captcha
 from hv_bot.gui.gui_dialog import detected_dialog, click_dialog
-from hv_bot.gui.gui_execute import move_and_hover, move_and_click, get_fullscreen_image, move_relatively_and_hover
+from hv_bot.gui.gui_execute import move_and_hover, move_and_click, get_fullscreen_image, move_relatively_and_hover, \
+    have_image
 from hv_bot.gui.gui_finish import detected_finish, click_finish
 from hv_bot.gui.gui_interface import get_info_from_fullscreen_image, execute_strategy
 from hv_bot.identify.character import get_exp
 from hv_bot.strategy.strategy_encounter import get_strategy_encounter
 from hv_bot.util import logger
+from hv_bot.util import path
 from hv_bot.util.ocr import ocr_single_line_text
 
 # TODO move them into local
@@ -92,24 +95,27 @@ def _click_encounter_failed_dialog() -> None:
 
 
 def _detect_dawn_event(fullscreen_image: Image) -> bool:
-    dawn_dialog_image = _crop_encounter_failed_dialog_image(fullscreen_image)
-    dawn_dialog_image.show()
-    logging.info(f"_encounter_dawn_event")
-    send_text(f"检测到黎明事件")
-    return True
+    os.chdir(path.ROOT_PATH)
+    dawn_dialog_image = Image.open("res\\dawn_event.png")
+    if have_image(dawn_dialog_image, fullscreen_image):
+        logging.info(f"_encounter_dawn_event")
+        send_text(f"检测到黎明事件")
+        return True
+    return False
 
 
 def _handle_dawn_event() -> None:
     _click_encounter_failed_dialog()
     logging.info(f"_handle_dawn_event")
     send_text(f"处理黎明事件")
+    time.sleep(3)
     return
 
 
 def _update_encounter_status(fullscreen_image: Image) -> [str, str]:
     if _detect_dawn_event(fullscreen_image):
         _handle_dawn_event()
-        exit(0)
+        time.sleep(2)
 
     stamina_image = _crop_stamina_image(fullscreen_image)
     # Sometimes ocr returns Stamina: 58°

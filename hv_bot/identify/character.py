@@ -89,6 +89,12 @@ def get_spirit_stance(fullscreen_image: Image) -> bool:
     return False
 
 
+def _have_attack(fullscreen_image: Image) -> bool:
+    os.chdir(hv_bot.util.path.ROOT_PATH)
+    attack_image = Image.open("res\\character\\attack.png")
+    return have_image(attack_image, fullscreen_image)
+
+
 def get_exp(fullscreen_image: Image) -> float:
     EXP_BAR_BOX_LEFT = 0
     EXP_BAR_BOX_TOP = 692
@@ -122,6 +128,9 @@ def get_exp(fullscreen_image: Image) -> float:
 
 def get_character(fullscreen_image: Image) -> Character | None:
     character = Character()
+
+    if not _have_attack(fullscreen_image):
+        return None
 
     hp, mp, sp, cp = get_xps_from_xp_bar_image(crop_xp_bar_image(fullscreen_image))
     character.hp, character.mp, character.sp, character.cp = hp, mp, sp, int(cp * 250)

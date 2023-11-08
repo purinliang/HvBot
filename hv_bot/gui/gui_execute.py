@@ -16,8 +16,8 @@ def get_fullscreen_image() -> Image:
     fullscreen_image: Image = None
 
     # the following two lines are used for test
-    # os.chdir(hv_bot.util.path.ROOT_PATH)
-    # fullscreen_image = Image.open(r"res/finish_1020_103041.png")
+    os.chdir(hv_bot.util.path.ROOT_PATH)
+    fullscreen_image = Image.open(r"res/dawn_event_test.png")
 
     if fullscreen_image is None:
         # if no test image, use screenshot to instead
