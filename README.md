@@ -24,3 +24,11 @@ In addition, there are a lot of features to develop and some bugs to fix.
 - HvBot will **fully control** your mouse, to stop it, move your mouse quickly to one of the 4 corners of your screen.
 
 - Sometimes HvBot may crash, so run in **process mode** is preferable, rather than thread mode.
+
+### Development History
+
+#### v0.3.1.1 [Nov. 8th, 2023]
+
+- Test passed: auto_encounter  
+
+- Ready to test
