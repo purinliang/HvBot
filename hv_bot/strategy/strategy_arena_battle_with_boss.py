@@ -59,7 +59,7 @@ def _battle_with_few_dangerous_bosses(character: Character, monster_list: Monste
     if _strategy != {}:
         return _strategy
 
-    # cp too many and "vital_strike" is ready, use "shield_bash" to give "shocked" buff to boss
+    # cp too many and "vital_strike" is ready, use "shield_bash" to give "stunned" buff to boss
     if character.have_spell("shield_bash") and character.have_spell("vital_strike") and character.cp >= 150:
         index = low_level_strategy_boss.get_boss_spell_target_index(monster_list, "shield_bash")
         return strategy_use_spell("shield_bash", index)
@@ -88,7 +88,7 @@ def _battle_with_yggdrasil(character, monster_list) -> dict:
     if _strategy != {}:
         return _strategy
 
-    # cp too many and "vital_strike" is ready, use "shield_bash" to give "shocked" buff to boss
+    # cp too many and "vital_strike" is ready, use "shield_bash" to give "stunned" buff to boss
     if character.have_spell("shield_bash") and character.have_spell("shield_bash") and character.cp >= 150:
         index = low_level_strategy_boss.get_boss_spell_target_index_for_yggdrasil(monster_list, "shield_bash")
         return strategy_use_spell("shield_bash", index)
@@ -128,20 +128,7 @@ def battle_with_ultimates(character: Character, monster_list: MonsterList) -> di
     return _battle_with_few_dangerous_bosses(character, monster_list, "min_hp")
 
 
-# TODO test code
-BATTLE_WITH_DRAGONS_SEND_COUNT = 2
-
-
 def battle_with_dragons(character: Character, monster_list: MonsterList) -> dict:
     if not monster_list.have_dragon():
         return {}
-    # TODO debug
-    logging.info(f"battle_with_dragons")
-
-    global BATTLE_WITH_DRAGONS_SEND_COUNT
-    if BATTLE_WITH_DRAGONS_SEND_COUNT > 0:
-        send_text(f"battle_with_dragons")
-        dragon_image = hv_bot.gui.gui_execute.save_fullscreen_image("dragon")
-        send_image(dragon_image)
-        BATTLE_WITH_DRAGONS_SEND_COUNT -= 1
     return _battle_with_few_dangerous_bosses(character, monster_list, "min_hp")

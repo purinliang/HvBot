@@ -84,27 +84,27 @@ def find_vital_strike_target_index(monster_list) -> int:
     Notice that this function will not distinct boss monster.
     :return: target monster index, or -1 represent not find
     """
-    # filter monsters who are "shocked" and taking more damage by "vital_strike". it will be more efficient.
-    shocked_monsters = [monster for monster in monster_list.monsters
+    # filter monsters who are "stunned" and taking more damage by "vital_strike". it will be more efficient.
+    stunned_monsters = [monster for monster in monster_list.monsters
                         if not monster.dead
-                        and monster.have_status("shocked")]
+                        and monster.have_status("stunned")]
 
     # find target without "silence" and "weaken" first, they are more deterrent
     # filter monsters who aren't "silence" and "weaken" and their hp >= 0.3
-    filtered_shocked_monsters = [monster for monster in shocked_monsters
+    filtered_stunned_monsters = [monster for monster in stunned_monsters
                                  if not monster.have_status("silence") and not monster.have_status("weaken")
                                  and monster.hp >= 0.3]
 
-    if len(filtered_shocked_monsters) == 0:
+    if len(filtered_stunned_monsters) == 0:
         # no suitable target, to find target within the whole list
         # filter monsters whose hp >= 0.3
-        filtered_shocked_monsters = [monster for monster in shocked_monsters
+        filtered_stunned_monsters = [monster for monster in stunned_monsters
                                      if monster.hp >= 0.3]
-    if len(filtered_shocked_monsters) == 0:
+    if len(filtered_stunned_monsters) == 0:
         # logging.debug("vital_strike: no target")
         return -1
 
     # find the monster who has the most hp in above lists
-    max_hp_monster: Monster = max(filtered_shocked_monsters, key=lambda monster: monster.hp)
+    max_hp_monster: Monster = max(filtered_stunned_monsters, key=lambda monster: monster.hp)
     # logging.debug(f"vital_strike: target={monster_list.number_index_to_letter_index(max_hp_monster.index)}")
     return max_hp_monster.index

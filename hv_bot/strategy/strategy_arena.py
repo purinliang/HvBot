@@ -268,8 +268,11 @@ def battle_with_normal_monsters(character: Character, monster_list: MonsterList)
 
 
 def get_strategy_arena(character: Character, monster_list: MonsterList):
+    if character is None or monster_list is None:
+        return strategy_skip()
+
     if monster_list.get_alive_monster_count() == 0:
-        return {}
+        return strategy_skip()
 
     # the following is to maintain character's live, should be processed at first priority
     strategy: dict = _maintain_gem(character)
@@ -301,4 +304,4 @@ def get_strategy_arena(character: Character, monster_list: MonsterList):
         return strategy
 
     logging.warning("no suitable strategy")
-    return {}
+    return strategy_skip()

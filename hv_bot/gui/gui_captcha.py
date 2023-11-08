@@ -138,7 +138,7 @@ def _report_captcha_timeout(rest_time: float) -> None:
     if rest_time < 0:
         text = f"验证码已超时，超时时间={abs(rest_time):.0f}"
     send_text(text)
-    winsound.Beep(1200, 600)
+    # winsound.Beep(1200, 600)
     time.sleep(0.8)
     return
 
@@ -146,17 +146,17 @@ def _report_captcha_timeout(rest_time: float) -> None:
 def _report_captcha_submitted(rest_time: float) -> None:
     logging.info(f"captcha not find, has it been submitted? rest_time={rest_time:.1f}")
     send_text(f"验证码已消失，是否已被提交？剩余时间={rest_time:.1f}")
-    winsound.Beep(600, 600)
+    # winsound.Beep(600, 600)
     time.sleep(0.8)
     return
 
 
 def _captcha_beep():
-    winsound.Beep(1000, 350)
+    # winsound.Beep(1000, 350)
     time.sleep(0.075)
-    winsound.Beep(1000, 200)
+    # winsound.Beep(1000, 200)
     time.sleep(0.075)
-    winsound.Beep(1000, 200)
+    # winsound.Beep(1000, 200)
     time.sleep(0.075)
 
 

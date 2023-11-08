@@ -217,19 +217,22 @@ def _start_battle_arena(event: threading.Event) -> None:
                 send_text(f"竞技场自动战斗，战斗已结束，退出，exp={exp:.2f}%")
                 time.sleep(2)
                 return
-
-        ocr_round_count = False
-
-        if is_new_round(character, monster_list):
-            round_count += 1
-            if round_count % 5 == 3 or round_count % 5 == 4:
-                # each 5 round to ocr the round_count twice, correct it
-                ocr_round_count = True
-            send_round_info(round_count, sum_round, character.exp)
+            # Maybe there is some network lag
+            time.sleep(3)
+            continue
 
         # TODO move the following code to other place
-        if monster_list.round_count > 0 and monster_list.sum_round > 0:
-            round_count, sum_round = monster_list.round_count, monster_list.sum_round
+        if ocr_round_count:
+            if monster_list.round_count > 0 and monster_list.sum_round > 0:
+                round_count, sum_round = monster_list.round_count, monster_list.sum_round
+            ocr_round_count = False
+        else:
+            if is_new_round(character, monster_list):
+                round_count += 1
+                if round_count % 5 == 3 or round_count % 5 == 4:
+                    # each 5 round to ocr the round_count twice, correct it
+                    ocr_round_count = True
+                send_round_info(round_count, sum_round, character.exp)
 
         # logging.debug(character)
         # logging.debug(monster_list)
@@ -259,7 +262,10 @@ def _should_send_round_info(round_count: int, sum_round: int) -> bool:
 def send_round_info(round_count: int, sum_round: int, exp: float) -> None:
     logging.warning(f"the {ordinal(round_count)} round, exp={exp:.2f}%")
     if _should_send_round_info(round_count, sum_round):
-        send_text(f"第{round_count}/{sum_round}轮，exp={exp:.2f}%")
+        if sum_round > 0:
+            send_text(f"第{round_count}/{sum_round}轮，exp={exp:.2f}%")
+        else:
+            send_text(f"第{round_count}轮，exp={exp:.2f}%")
 
     # if round_count % 30 == 0:
     #     screenshot_image_path = save_fullscreen_image("screenshot")

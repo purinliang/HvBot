@@ -5,6 +5,9 @@ from hv_bot.strategy.format_strategy import strategy_use_spell, strategy_use_spi
 
 
 def get_strategy_encounter(character: Character, monster_list: MonsterList):
+    if character is None or monster_list is None:
+        return strategy_skip()
+
     if character.hp <= 0.35:
         if not character.have_spell("cure"):
             return strategy_skip()

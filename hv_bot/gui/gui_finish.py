@@ -13,20 +13,34 @@ from hv_bot.gui.gui_execute import have_image, locate_image_and_click, save_full
 def detected_finish(fullscreen_image: Image) -> bool:
     os.chdir(hv_bot.util.path.ROOT_PATH)
     needle_image = Image.open("res\\finish_battle_button.png")
-    return have_image(needle_image, fullscreen_image)
+    if have_image(needle_image, fullscreen_image):
+        return True
+    needle_image = Image.open("res\\finish_battle_button_blue.png")
+    if have_image(needle_image, fullscreen_image):
+        return True
+    return False
 
 
 def locate_finish_button(fullscreen_image: Image):
     os.chdir(hv_bot.util.path.ROOT_PATH)
     needle_image = Image.open("res\\finish_battle_button.png")
-    return locate_image(needle_image, fullscreen_image)
+    if have_image(needle_image, fullscreen_image):
+        return locate_image(needle_image, fullscreen_image)
+    needle_image = Image.open("res\\finish_battle_button_blue.png")
+    if have_image(needle_image, fullscreen_image):
+        return locate_image(needle_image, fullscreen_image)
+    return None
 
 
 def click_finish_button(fullscreen_image: Image) -> None:
     time.sleep(0.5)
     os.chdir(hv_bot.util.path.ROOT_PATH)
     needle_image = Image.open("res\\finish_battle_button.png")
-    locate_image_and_click(needle_image, fullscreen_image)
+    if have_image(needle_image, fullscreen_image):
+        locate_image_and_click(needle_image, fullscreen_image)
+    needle_image = Image.open("res\\finish_battle_button_blue.png")
+    if have_image(needle_image, fullscreen_image):
+        locate_image_and_click(needle_image, fullscreen_image)
     return
 
 
@@ -47,5 +61,5 @@ def click_finish(fullscreen_image: Image) -> None:
 
     click_finish_button(fullscreen_image)
 
-    winsound.Beep(600, 600)
+    # winsound.Beep(600, 600)
     return

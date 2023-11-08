@@ -91,7 +91,26 @@ def _click_encounter_failed_dialog() -> None:
     return
 
 
+def _detect_dawn_event(fullscreen_image: Image) -> bool:
+    dawn_dialog_image = _crop_encounter_failed_dialog_image(fullscreen_image)
+    dawn_dialog_image.show()
+    logging.info(f"_encounter_dawn_event")
+    send_text(f"检测到黎明事件")
+    return True
+
+
+def _handle_dawn_event() -> None:
+    _click_encounter_failed_dialog()
+    logging.info(f"_handle_dawn_event")
+    send_text(f"处理黎明事件")
+    return
+
+
 def _update_encounter_status(fullscreen_image: Image) -> [str, str]:
+    if _detect_dawn_event(fullscreen_image):
+        _handle_dawn_event()
+        exit(0)
+
     stamina_image = _crop_stamina_image(fullscreen_image)
     # Sometimes ocr returns Stamina: 58°
     stamina_text = ocr_single_line_text(stamina_image).removesuffix("°")
@@ -220,6 +239,9 @@ def _start_battle_encounter(event: threading.Event) -> None:
                 send_text(f"遭遇战自动战斗，战斗已结束，退出，exp={exp:.2f}%")
                 time.sleep(2)
                 return
+            # Maybe there is some network lag
+            time.sleep(3)
+            continue
 
         # logging.debug(character)
         # logging.debug(monster_list)
@@ -317,12 +339,14 @@ def _start_auto_select_encounter(event: threading.Event) -> None:
         _, encounter_text = _update_encounter_status(fullscreen_image)
         if encounter_text.endswith("[24]"):
             # daily limit has been reached
-            logging.info(f"daily limit 24 times has been reached, exit")
-            send_text(f"已到达24次每日上限，退出")
-            break
+            sleeping_time = 15 * 60
+            logging.info(f"daily limit 24 times has been reached, wait {sleeping_time} seconds")
+            send_text(f"已到达24次每日上限，等待 {sleeping_time} 秒")
+            _sleep_for_long_time(sleeping_time, event)
+            continue
         if encounter_text.startswith("Expired"):
             _click_encounter()
-            time.sleep(1)
+            time.sleep(2)
             continue
         if not encounter_text.startswith("Ready"):
             try:
@@ -333,7 +357,7 @@ def _start_auto_select_encounter(event: threading.Event) -> None:
                 logging.error(error)
                 logging.error(f"failed to parse encounter rest time, retry")
                 send_text(f"解析遭遇战剩余时间失败，重试")
-                time.sleep(5)
+                time.sleep(15)
                 continue
 
             # sleeping_time up to 15 minutes
