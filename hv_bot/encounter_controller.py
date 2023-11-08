@@ -322,6 +322,10 @@ def start_auto_select_encounter(event: threading.Event) -> None:
     return
 
 
+ENCOUNTER_TEXT_VALUE_ERROR_RETRY_WAITING_TIME_DEFAULT = 15
+ENCOUNTER_TEXT_VALUE_ERROR_RETRY_WAITING_TIME = ENCOUNTER_TEXT_VALUE_ERROR_RETRY_WAITING_TIME_DEFAULT
+
+
 def _start_auto_select_encounter(event: threading.Event) -> None:
     """
     if encounter is not ready, wait for it.
@@ -360,10 +364,12 @@ def _start_auto_select_encounter(event: threading.Event) -> None:
                 rest_minutes = int(rest_time_text.split(":")[0])
                 rest_seconds = int(rest_time_text.split(":")[1])
             except ValueError as error:
-                sleeping_time = 30
+                global ENCOUNTER_TEXT_VALUE_ERROR_RETRY_WAITING_TIME
+                sleeping_time = ENCOUNTER_TEXT_VALUE_ERROR_RETRY_WAITING_TIME
                 logging.error(error)
                 logging.error(f"failed to parse encounter rest time, wait {sleeping_time} seconds")
                 send_text(f"解析遭遇战剩余时间失败，等待 {sleeping_time} 秒")
+                ENCOUNTER_TEXT_VALUE_ERROR_RETRY_WAITING_TIME *= 2
                 _sleep_for_long_time(sleeping_time, event)
                 continue
 
@@ -376,6 +382,7 @@ def _start_auto_select_encounter(event: threading.Event) -> None:
             _sleep_for_long_time(sleeping_time, event)
             continue
 
+        ENCOUNTER_TEXT_VALUE_ERROR_RETRY_WAITING_TIME = ENCOUNTER_TEXT_VALUE_ERROR_RETRY_WAITING_TIME_DEFAULT
         _hover_wait_and_click_encounter()
 
         if not _handle_encounter_failed_dialog(retry_times=8, retry_waiting_duration=15):
