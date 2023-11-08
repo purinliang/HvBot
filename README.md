@@ -6,117 +6,143 @@
 
 ## Description
 
-HvBot is a program that helps you to automate some actions when playing a less-known web game. The game is one type of
-out-of-date RPG (Role-Playing Game) games, without colorful and vivid graphics but just like text-based RPG, but this
-feature makes it incredibly suitable for developing easy and simple automatically scripts, to learn and improve
-programming skills.
+HvBot is a program that helps you automate actions while playing a lesser-known out-of-date web game. The game is a type
+of RPG (Role-Playing Game) with a text-based interface instead of fancy graphics. This simplicity makes it perfect for
+developing easy and straightforward automation scripts, allowing you to learn and improve your programming skills.
 
 ## Game Description
 
 ### Character
 
-The character you control, maybe have some job, for example warrior or magician. The latest version HvBot only works for
-warrior job, more specifically a warrior using one-handed weapon and a shield.
+In the game, you control a character who can have different jobs, such as a warrior or a magician. However, the latest
+version of HvBot is specifically designed for the warrior job, particularly for warriors who use a one-handed weapon and
+a shield.
 
-- Basic status:
-    - HP: Health Points.
-    - MP: Magic Points. Used for casting spells, for more information, look Spells.
-    - SP: Spirit Points. Used for casting Weapon Skills, for more information, look Weapon Skills.
-    - CP: Used for casting Weapon Skills, for more information, look Weapon Skills.
-- Spells: Spells include supportive spells, which can give you some positive buffs. Or deprecating spells, which can
-  give monsters negative debuffs. Or the other spells that deal damage to monsters, but useless to warrior job.
-- Weapon Skills: Warrior job can use weapon skills, to deal vital damage to monsters.
-- Status: Mostly supportive buffs, which can enhance the power of character, including offensive and defensive.
-- Consumables: Character can use consumables to recover basic status, for example HP Potion for recovering 100% HP
-  immediately.
+- **Basic Status:**
+    - **HP:** Health Points, which represent the character's health.
+    - **MP:** Magic Points, used for casting spells (more details in the "Spells" section).
+    - **SP:** Spirit Points, used for casting Weapon Skills (more details in the "Weapon Skills" section).
+    - **DP:** Used for casting Weapon Skills (more details in the "Weapon Skills" section).
 
-### Monster
+- **Spells:** Spells in the game can be supportive, providing positive buffs to the character, or deprecating,
+  inflicting
+  negative debuffs on monsters. There are also spells that deal damage to monsters, but they are not useful for warrior
+  characters.
 
-The monsters you battle with, including normal monsters or bosses. Some bosses can deal huge damage, and they are really
-dangerous to character.
+- **Weapon Skills:** Warrior characters can use special Weapon Skills that allow them to deal significant damage to
+  monsters.
 
-- Basic status: Monsters have 3 types of basic status, including HP, MP and SP. MP and SP are used to cast spell,
-  dealing much more
-  damage than normal attack.
-- Status: The status monsters have, normally some debuffs you give to them. For example, "silenced" for cannot cast any
-  spells, "
-  weakened" for dealing less damage.
-- Boss: There are 4 types of bosses, including normal bosses, and special bosses.
+- **Status:** These are mostly supportive buffs that enhance the character's power, both in offense and defense.
+
+- **Consumables:** Characters can use consumable items to recover their basic status. For example, an HP Potion can
+  instantly restore 100% of the character's HP.
+
+### Monsters
+
+In the game, you will encounter various types of monsters, including normal monsters and bosses. Some bosses can inflict
+significant damage and pose a real threat to your character.
+
+- **Basic Status:** Monsters have three types of basic status:
+    - **HP:** Health Points
+    - **MP:** Magic Points
+    - **SP:** Spirit Points
+    - MP and SP are used by monsters to cast spells, which can cause much more damage than their normal attacks.
+
+- **Status:** Monsters can also have status effects, which are typically debuffs inflicted by the player. For example, a
+  monster may be "silenced," meaning it cannot cast any spells, or "weakened," resulting in reduced damage output.
+
+- **Bosses:** There are four types of bosses in the game, including normal bosses and special bosses. These bosses are
+  typically more challenging to defeat and may require specific strategies to overcome.
 
 ## How to use
 
-### Run independently
+### Run Independently
 
-HvBot can be run independently, by just double-click the scripts (e.g. arena_controller.py and encounter_controller.py
-for automatically battle, income_statistics.py and stamina_statistics.py for data analysis).
+You can run HvBot independently by double-clicking on the scripts:
+
+- arena_controller.py or encounter_controller.py to automatically engage in battles.
+
+- income_statistics.py or stamina_statistics.py for data analysis purposes.
 
 ### Run with AriaBot
 
-However, the most efficient approach to use is to use with AriaBot.
+To maximize efficiency, it is recommended to use HvBot with AriaBot.
 
-AriaBot is a TelegramBot, and it can help you to control your computer to run some commands or python scripts
-automatically. It provides methods to start, monitor, control, interrupt, and close other commands or scripts running in
-its sub-threads or sub-processes.
+AriaBot is a TelegramBot that enables you to control your computer and automate the execution of commands or Python
+scripts. It offers a range of methods for starting, monitoring, controlling, interrupting, and closing other commands or
+scripts running within its sub-threads or sub-processes.
 
-AriaBot can start HvBot by command, and inspect the running status including automatically start arena or random
-encounter battle, or start battle with different strategy.
+By using AriaBot, you can start HvBot through a command and inspect its running status. Additionally, AriaBot allows you
+to automatically initiate battles in the arena or with random encounters. You can also customize the battle strategy
+based on your preferences.
+
+By leveraging the capabilities of AriaBot, you can enhance your control over HvBot and streamline your gaming
+experience.
 
 #### AriaBot Commands
 
-The following is all the commands that can be used by AriaBot:
+To control HvBot using AriaBot, you need to start the AriaBot server on your computer and send commands through the
+Telegram bot **@ArcticAriaBot**.
 
-> /hv help
+Here are all the commands that can be used with AriaBot:
 
-Command **/hv help** can output the help text, including all the commands that can be used by AriaBot and their
-corresponding functions.
+1. `/hv help`
 
-> /hv auto arena
+    - The command `/hv help` displays the help text, which includes a list of commands that can be used with
+      AriaBot, along with their corresponding functions.
 
-Command **/hv auto arena** can automatically select the latest arena in the arena selecting panel.
+2. `/hv auto arena`
 
-- The bot will check whether random encounter battle is ready, if true, it will tackle random encounter battle first.
-- The routine of selecting arena and its corresponding automatic battle will be run twice.
-    - However, if the command be executed when the previous battle is not finished, the bot will tackle the previous
-      battle in "arena battle mode", and seem that as a normal routine mentioned above.
+    - The command `/hv auto arena` automatically selects the latest arena from the arena selection panel.
 
-> /hv auto encounter
+    - The bot will check if a random encounter battle is ready. If true, it will prioritize tackling the random
+      encounter battle first.
 
-Command **/hv auto encounter** can automatically select the random encounter battle, and wait for the next coming random
-encounter battle.
+    - The routine of selecting the arena and initiating the automatic battle will be executed twice.
+        - However, if the command is executed while a previous battle is still in progress, the bot will continue with
+          the previous battle in "arena battle mode," as part of the normal routine mentioned above.
 
-- To avoid the power of the computer or the monitor automatically shutdown, when waiting for the next coming random
-  encounter battle, the bot will randomly move the mouse periodically.
+3. `/hv auto encounter`
 
-> /hv once encounter
+    - The command `/hv auto encounter` automatically selects the random encounter battle and waits for the next one to
+      occur.
 
-Command **/hv auto encounter** can automatically select the random encounter battle, but will not wait for the next
-coming random
-encounter battle, the bot will exit immediately instead.
+    - To prevent the computer or monitor from automatically shutting down during the wait for the next random encounter
+      battle, the bot will periodically move the mouse randomly.
 
-> /hv arena
+4. `/hv once encounter`
 
-Command **/hv arena** can automatically continue a battle in "arena mode".
+    - The command `/hv once encounter` automatically selects the random encounter battle but does not wait for the next
+      one. Instead, the bot will exit immediately.
 
-> /hv encounter
+5. `/hv arena`
 
-Command **/hv encounter** can automatically continue a battle in "random encounter mode".
+    - The command `/hv arena` automatically continues a battle in "arena mode".
 
-> /hv help
+6. `/hv encounter`
 
-Command **/hv help** can output the help text, including all the commands that can be used by AriaBot and their
-corresponding functions. (Already mentioned above)
+    - The command `/hv encounter` automatically continues a battle in "random encounter mode".
 
-> /hv screenshot
+7. `/hv help`
 
-Command **/hv screenshot** can ask the bot to get a screenshot and send it through AriaBot. This command is useful when
-need to monitor the running status or check and save the situation that cause bugs. The screenshots caused bugs can be
-used as test-case to check whether the new version bot can tackle the problem right.
+    - The command `/hv help` outputs the help text, which includes a list of commands that can be used with AriaBot and
+      their corresponding functions. (Already mentioned above)
 
-> /hv close
+8. `/hv screenshot`
 
-Command **/hv screenshot** can ask the bot to close itself. Sometimes the bot is running in a wrong situation, this
-command can interrupt the wrong running mode. Additionally, this command can also be used to close the bot for saving
-power of the computer.
+    - The command `/hv screenshot` instructs the bot to capture a screenshot and send it through AriaBot.
+
+        - This command is useful for monitoring the running status, checking for bugs, and saving the current situation
+          as a test case.
+
+        - Screenshots of situation that cause bugs can be used to verify whether the new version of the bot can handle
+          the issue correctly.
+
+9. `/hv close`
+
+    - The command `/hv close` instructs the bot to close itself. This command can be useful in situations where the bot
+      is running incorrectly and needs to be interrupted. Additionally, it can be used to close the bot and save power
+      on the computer.
 
 ### Attention
 
@@ -149,11 +175,11 @@ In addition, there are a lot of features to develop and some bugs to fix.
 - All Test passed.
 
 - Fixed issues:
-   - When start arena or encounter, sometimes the program will be idle.
-   - When encounter dawn_event, the program will be idle.
-   - When battle finish, sometimes the mouse will select the finish_button make its color turn into blue, leading the
-     program can not identify to finish button, and the program will be idle.
-   - When parse encounter_text fail, the program send too many error reporting texts.
+    - When start arena or encounter, sometimes the program will be idle.
+    - When encounter dawn_event, the program will be idle.
+    - When battle finish, sometimes the mouse will select the finish_button make its color turn into blue, leading the
+      program can not identify to finish button, and the program will be idle.
+    - When parse encounter_text fail, the program send too many error reporting texts.
 
 #### v0.3.1.0 [Oct. 24th, 2023]
 
@@ -167,7 +193,7 @@ In addition, there are a lot of features to develop and some bugs to fix.
     - Stamina_statistics: Now the program can calc the stamina cost penalty rate. But it needs to
       be run manually.
 
-#### v0.3.0.5  [Oct. 19th, 2023] 
+#### v0.3.0.5  [Oct. 19th, 2023]
 
 - Fixed issues:
     - When meeting captcha, report too much text to AriaBot.
@@ -176,9 +202,9 @@ In addition, there are a lot of features to develop and some bugs to fix.
     - Fix the limitation of waiting captcha answer
 
 - New features:
-    - Now can calc stamina cost penalty manually 
+    - Now can calc stamina cost penalty manually
 
-#### v0.3.0.4 (released)  [Oct. 18th, 2023] 
+#### v0.3.0.4 (released)  [Oct. 18th, 2023]
 
 - Fixed issues:
     - When submitting captcha, if the checkbox of twilight sparkle is checked, the bot will misjudge that the captcha
@@ -188,7 +214,7 @@ In addition, there are a lot of features to develop and some bugs to fix.
       send text anymore (main_controller crash) or battle is stopped (battle crash).
 
 #### v0.3.0.3 [Oct. 18th, 2023]
-  
+
 - Fixed issues:
     - Before confirming the dialog when selecting an arena, there is no waiting time.
     - Only use debuff to the first position.
