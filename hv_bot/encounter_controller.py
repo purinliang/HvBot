@@ -393,8 +393,8 @@ def _start_auto_select_encounter(event: threading.Event) -> None:
                 _sleep_for_long_time(sleeping_time, event)
                 continue
 
-            # sleeping_time up to 15 minutes
-            sleeping_time = min(rest_minutes * 60 + rest_seconds, 15 * 60)
+            # sleeping_time up to 30 minutes
+            sleeping_time = min(rest_minutes * 60 + rest_seconds, 30 * 60)
             logging.info(f"failed to select encounter, not ready, wait {sleeping_time} seconds")
             next_check_time = int(time.time() + sleeping_time)
             style_next_check_time = time.strftime("%H:%M:%S", time.localtime(next_check_time))
