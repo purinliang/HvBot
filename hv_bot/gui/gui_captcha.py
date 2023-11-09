@@ -93,13 +93,9 @@ def handle_captcha(fullscreen_image: Image):
         if 0 <= rest_time <= rest_time_alert:
             logging.warning(f"rest_time={rest_time:.0f}")
             send_text(f"剩余时间：{rest_time:.0f}")
-
             _captcha_beep()
 
-            if rest_time_alert >= 15:
-                rest_time_alert -= 5
-            else:
-                rest_time_alert -= 2
+            rest_time_alert -= 4
         if not detected_captcha(fullscreen_image):
             # captcha has been submitted
             _report_captcha_submitted(rest_time)
