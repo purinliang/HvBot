@@ -267,6 +267,15 @@ def start_once_select_encounter(event: threading.Event) -> None:
     return
 
 
+def _is_new_day() -> bool:
+    current_time_hour = int(time.strftime("%H", time.localtime(time.time())))
+    logging.debug(f"current_time={current_time_hour}")
+    if 8 <= current_time_hour <= 12:
+        logging.info(f"is new day")
+        return True
+    return False
+
+
 def _start_once_select_encounter(event: threading.Event) -> None:
     """
     if encounter is not ready, do nothing.
@@ -283,6 +292,12 @@ def _start_once_select_encounter(event: threading.Event) -> None:
         _, encounter_text = _update_encounter_status(fullscreen_image)
         if encounter_text.endswith("[24]"):
             # daily limit has been reached
+            if _is_new_day():
+                send_text(f"新的一天")
+                _click_encounter()
+                time.sleep(2)
+                continue
+
             logging.info(f"daily limit 24 times has been reached, exit")
             send_text(f"已到达24次每日上限，退出")
             break
@@ -349,7 +364,13 @@ def _start_auto_select_encounter(event: threading.Event) -> None:
         _, encounter_text = _update_encounter_status(fullscreen_image)
         if encounter_text.endswith("[24]"):
             # daily limit has been reached
-            sleeping_time = 15 * 60
+            if _is_new_day():
+                send_text(f"新的一天")
+                _click_encounter()
+                time.sleep(2)
+                continue
+
+            sleeping_time = 30 * 60
             logging.info(f"daily limit 24 times has been reached, wait {sleeping_time} seconds")
             send_text(f"已到达24次每日上限，等待 {sleeping_time} 秒")
             _sleep_for_long_time(sleeping_time, event)
