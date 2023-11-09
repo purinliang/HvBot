@@ -312,18 +312,19 @@ def _start_once_select_encounter(event: threading.Event) -> None:
 
         _hover_wait_and_click_encounter()
 
-        if not _handle_encounter_failed_dialog(retry_times=3, retry_waiting_duration=15):
-            logging.info(f"failed to select encounter, failed to handle failed dialog, exit")
-            send_text(f"选择遭遇战失败，处理错误弹窗失败，退出")
-            break
+        for _ in range(3):
+            time.sleep(3)
+            if not _handle_encounter_failed_dialog(retry_times=3, retry_waiting_duration=15):
+                logging.info(f"failed to select encounter, failed to handle failed dialog, exit")
+                send_text(f"选择遭遇战失败，处理错误弹窗失败，退出")
+                continue
+
+            if gui_battle_continue.is_battling():
+                _start_battle_encounter(event)
+                time.sleep(2)
+                break
 
         time.sleep(2)
-
-        _start_battle_encounter(event)
-        time.sleep(2)
-
-        # _back_to_main_page()
-        # time.sleep(2)
         break
 
     return
@@ -405,20 +406,22 @@ def _start_auto_select_encounter(event: threading.Event) -> None:
         ENCOUNTER_TEXT_VALUE_ERROR_RETRY_WAITING_TIME = ENCOUNTER_TEXT_VALUE_ERROR_RETRY_WAITING_TIME_DEFAULT
         _hover_wait_and_click_encounter()
 
-        if not _handle_encounter_failed_dialog(retry_times=8, retry_waiting_duration=15):
-            sleeping_time = 15 * 60
-            logging.info(f"failed to select encounter, failed to handle failed dialog, wait {sleeping_time} seconds")
-            send_text(f"选择遭遇战失败，处理错误弹窗失败，等待 {sleeping_time} 秒")
-            _sleep_for_long_time(sleeping_time, event)
-            continue
+        for _ in range(5):
+            time.sleep(3)
+            if not _handle_encounter_failed_dialog(retry_times=8, retry_waiting_duration=15):
+                sleeping_time = 15 * 60
+                logging.info(
+                    f"failed to select encounter, failed to handle failed dialog, wait {sleeping_time} seconds")
+                send_text(f"选择遭遇战失败，处理错误弹窗失败，等待 {sleeping_time} 秒")
+                _sleep_for_long_time(sleeping_time, event)
+                continue
+
+            if gui_battle_continue.is_battling():
+                _start_battle_encounter(event)
+                time.sleep(2)
+                break
 
         time.sleep(2)
-
-        _start_battle_encounter(event)
-        time.sleep(2)
-
-        # _back_to_main_page()
-        # time.sleep(2)
         continue
 
     return
