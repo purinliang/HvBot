@@ -169,6 +169,12 @@ The Util module includes utility functions and helpers that support various func
 
 ### Development History
 
+#### v0.3.1.2 [Nov. 9th, 2023]
+
+- Fixed issues:
+    - Fixed an issue where the program was still idle leading to miss the "dawn_event" encounter. Now it will verify
+      local time, and click encounter text to toggle "dawn_event" correctly.
+
 #### v0.3.1.1 (release) [Nov. 8th, 2023]
 
 - All tests have passed successfully.
