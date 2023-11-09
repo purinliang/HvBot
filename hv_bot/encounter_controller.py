@@ -55,7 +55,7 @@ def _crop_stamina_image(fullscreen_image: Image) -> Image:
 
 
 def _click_encounter() -> None:
-    logging.info(f"click_encounter")
+    # logging.info(f"click_encounter")
     x = ENCOUNTER_IMAGE_LEFT + ENCOUNTER_IMAGE_WIDTH // 2
     y = ENCOUNTER_IMAGE_TOP + ENCOUNTER_IMAGE_HEIGHT // 2
     move_and_click(x, y, move_duration=0.1, ending_wait_duration=0.75)
@@ -63,7 +63,7 @@ def _click_encounter() -> None:
 
 
 def _hover_encounter() -> None:
-    logging.info(f"hover_encounter")
+    # logging.info(f"hover_encounter")
     x = ENCOUNTER_IMAGE_LEFT + ENCOUNTER_IMAGE_WIDTH // 2
     y = ENCOUNTER_IMAGE_TOP + ENCOUNTER_IMAGE_HEIGHT // 2
     move_and_hover(x, y, move_duration=0.5)
@@ -99,7 +99,7 @@ def _detect_dawn_event(fullscreen_image: Image) -> bool:
     dawn_dialog_image = Image.open("res\\dawn_event.png")
     if have_image(dawn_dialog_image, fullscreen_image):
         logging.info(f"_encounter_dawn_event")
-        send_text(f"检测到黎明事件")
+        # send_text(f"检测到黎明事件")
         return True
     return False
 
@@ -107,7 +107,7 @@ def _detect_dawn_event(fullscreen_image: Image) -> bool:
 def _handle_dawn_event() -> None:
     _click_encounter_failed_dialog()
     logging.info(f"_handle_dawn_event")
-    send_text(f"处理黎明事件")
+    # send_text(f"处理黎明事件")
     time.sleep(3)
     return
 
@@ -272,6 +272,7 @@ def _is_new_day() -> bool:
     logging.debug(f"current_time={current_time_hour}")
     if 8 <= current_time_hour <= 12:
         logging.info(f"is new day")
+        send_text(f"新的一天")
         return True
     return False
 
@@ -293,7 +294,6 @@ def _start_once_select_encounter(event: threading.Event) -> None:
         if encounter_text.endswith("[24]"):
             # daily limit has been reached
             if _is_new_day():
-                send_text(f"新的一天")
                 _click_encounter()
                 time.sleep(2)
                 continue
@@ -365,7 +365,6 @@ def _start_auto_select_encounter(event: threading.Event) -> None:
         if encounter_text.endswith("[24]"):
             # daily limit has been reached
             if _is_new_day():
-                send_text(f"新的一天")
                 _click_encounter()
                 time.sleep(2)
                 continue
