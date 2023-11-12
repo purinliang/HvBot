@@ -70,10 +70,10 @@ def _hover_encounter() -> None:
     return
 
 
-ENCOUNTER_FAILED_DIALOG_IMAGE_LEFT = 476
-ENCOUNTER_FAILED_DIALOG_IMAGE_TOP = 336
-ENCOUNTER_FAILED_DIALOG_IMAGE_WIDTH = 288
-ENCOUNTER_FAILED_DIALOG_IMAGE_HEIGHT = 36
+ENCOUNTER_FAILED_DIALOG_IMAGE_LEFT = 409
+ENCOUNTER_FAILED_DIALOG_IMAGE_TOP = 342
+ENCOUNTER_FAILED_DIALOG_IMAGE_WIDTH = 420
+ENCOUNTER_FAILED_DIALOG_IMAGE_HEIGHT = 26
 
 
 def _crop_encounter_failed_dialog_image(fullscreen_image: Image) -> Image:
@@ -153,7 +153,8 @@ def _handle_encounter_failed_dialog(retry_times: int, retry_waiting_duration: in
                 logging.info(f"encounter_failed_dialog_text={encounter_failed_dialog_text}")
                 send_text(f"遇到了遭遇战错误弹窗：{encounter_failed_dialog_text}")
                 sent_encounter_failed_dialog_text = encounter_failed_dialog_text
-            if encounter_failed_dialog_text.startswith("Failed"):
+            if (encounter_failed_dialog_text.startswith("Failed")
+                    or encounter_failed_dialog_text.startswith("Reflecting")):
                 _click_encounter_failed_dialog()
                 time.sleep(retry_waiting_duration)
                 _click_encounter()
