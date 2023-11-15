@@ -55,7 +55,7 @@ def _crop_stamina_image(fullscreen_image: Image) -> Image:
 
 
 def _click_encounter() -> None:
-    logging.info(f"click_encounter")
+    # logging.info(f"click_encounter")
     x = ENCOUNTER_IMAGE_LEFT + ENCOUNTER_IMAGE_WIDTH // 2
     y = ENCOUNTER_IMAGE_TOP + ENCOUNTER_IMAGE_HEIGHT // 2
     move_and_click(x, y, move_duration=0.1, ending_wait_duration=0.75)
@@ -63,17 +63,17 @@ def _click_encounter() -> None:
 
 
 def _hover_encounter() -> None:
-    logging.info(f"hover_encounter")
+    # logging.info(f"hover_encounter")
     x = ENCOUNTER_IMAGE_LEFT + ENCOUNTER_IMAGE_WIDTH // 2
     y = ENCOUNTER_IMAGE_TOP + ENCOUNTER_IMAGE_HEIGHT // 2
     move_and_hover(x, y, move_duration=0.5)
     return
 
 
-ENCOUNTER_FAILED_DIALOG_IMAGE_LEFT = 476
-ENCOUNTER_FAILED_DIALOG_IMAGE_TOP = 336
-ENCOUNTER_FAILED_DIALOG_IMAGE_WIDTH = 288
-ENCOUNTER_FAILED_DIALOG_IMAGE_HEIGHT = 36
+ENCOUNTER_FAILED_DIALOG_IMAGE_LEFT = 409
+ENCOUNTER_FAILED_DIALOG_IMAGE_TOP = 342
+ENCOUNTER_FAILED_DIALOG_IMAGE_WIDTH = 420
+ENCOUNTER_FAILED_DIALOG_IMAGE_HEIGHT = 26
 
 
 def _crop_encounter_failed_dialog_image(fullscreen_image: Image) -> Image:
@@ -99,7 +99,7 @@ def _detect_dawn_event(fullscreen_image: Image) -> bool:
     dawn_dialog_image = Image.open("res\\dawn_event.png")
     if have_image(dawn_dialog_image, fullscreen_image):
         logging.info(f"_encounter_dawn_event")
-        send_text(f"检测到黎明事件")
+        # send_text(f"检测到黎明事件")
         return True
     return False
 
@@ -107,7 +107,7 @@ def _detect_dawn_event(fullscreen_image: Image) -> bool:
 def _handle_dawn_event() -> None:
     _click_encounter_failed_dialog()
     logging.info(f"_handle_dawn_event")
-    send_text(f"处理黎明事件")
+    # send_text(f"处理黎明事件")
     time.sleep(3)
     return
 
@@ -153,7 +153,8 @@ def _handle_encounter_failed_dialog(retry_times: int, retry_waiting_duration: in
                 logging.info(f"encounter_failed_dialog_text={encounter_failed_dialog_text}")
                 send_text(f"遇到了遭遇战错误弹窗：{encounter_failed_dialog_text}")
                 sent_encounter_failed_dialog_text = encounter_failed_dialog_text
-            if encounter_failed_dialog_text.startswith("Failed"):
+            if (encounter_failed_dialog_text.startswith("Failed")
+                    or encounter_failed_dialog_text.startswith("Reflecting")):
                 _click_encounter_failed_dialog()
                 time.sleep(retry_waiting_duration)
                 _click_encounter()
@@ -267,6 +268,16 @@ def start_once_select_encounter(event: threading.Event) -> None:
     return
 
 
+def _is_new_day() -> bool:
+    current_time_hour = int(time.strftime("%H", time.localtime(time.time())))
+    logging.debug(f"current_time={current_time_hour}")
+    if 8 <= current_time_hour <= 12:
+        logging.info(f"is new day")
+        send_text(f"新的一天")
+        return True
+    return False
+
+
 def _start_once_select_encounter(event: threading.Event) -> None:
     """
     if encounter is not ready, do nothing.
@@ -283,6 +294,11 @@ def _start_once_select_encounter(event: threading.Event) -> None:
         _, encounter_text = _update_encounter_status(fullscreen_image)
         if encounter_text.endswith("[24]"):
             # daily limit has been reached
+            if _is_new_day():
+                _click_encounter()
+                time.sleep(2)
+                continue
+
             logging.info(f"daily limit 24 times has been reached, exit")
             send_text(f"已到达24次每日上限，退出")
             break
@@ -297,18 +313,19 @@ def _start_once_select_encounter(event: threading.Event) -> None:
 
         _hover_wait_and_click_encounter()
 
-        if not _handle_encounter_failed_dialog(retry_times=3, retry_waiting_duration=15):
-            logging.info(f"failed to select encounter, failed to handle failed dialog, exit")
-            send_text(f"选择遭遇战失败，处理错误弹窗失败，退出")
-            break
+        for _ in range(3):
+            time.sleep(3)
+            if not _handle_encounter_failed_dialog(retry_times=3, retry_waiting_duration=15):
+                logging.info(f"failed to select encounter, failed to handle failed dialog, exit")
+                send_text(f"选择遭遇战失败，处理错误弹窗失败，退出")
+                continue
+
+            if gui_battle_continue.is_battling():
+                _start_battle_encounter(event)
+                time.sleep(2)
+                break
 
         time.sleep(2)
-
-        _start_battle_encounter(event)
-        time.sleep(2)
-
-        # _back_to_main_page()
-        # time.sleep(2)
         break
 
     return
@@ -349,7 +366,12 @@ def _start_auto_select_encounter(event: threading.Event) -> None:
         _, encounter_text = _update_encounter_status(fullscreen_image)
         if encounter_text.endswith("[24]"):
             # daily limit has been reached
-            sleeping_time = 15 * 60
+            if _is_new_day():
+                _click_encounter()
+                time.sleep(2)
+                continue
+
+            sleeping_time = 30 * 60
             logging.info(f"daily limit 24 times has been reached, wait {sleeping_time} seconds")
             send_text(f"已到达24次每日上限，等待 {sleeping_time} 秒")
             _sleep_for_long_time(sleeping_time, event)
@@ -373,8 +395,8 @@ def _start_auto_select_encounter(event: threading.Event) -> None:
                 _sleep_for_long_time(sleeping_time, event)
                 continue
 
-            # sleeping_time up to 15 minutes
-            sleeping_time = min(rest_minutes * 60 + rest_seconds, 15 * 60)
+            # sleeping_time up to 30 minutes
+            sleeping_time = min(rest_minutes * 60 + rest_seconds, 30 * 60)
             logging.info(f"failed to select encounter, not ready, wait {sleeping_time} seconds")
             next_check_time = int(time.time() + sleeping_time)
             style_next_check_time = time.strftime("%H:%M:%S", time.localtime(next_check_time))
@@ -385,20 +407,22 @@ def _start_auto_select_encounter(event: threading.Event) -> None:
         ENCOUNTER_TEXT_VALUE_ERROR_RETRY_WAITING_TIME = ENCOUNTER_TEXT_VALUE_ERROR_RETRY_WAITING_TIME_DEFAULT
         _hover_wait_and_click_encounter()
 
-        if not _handle_encounter_failed_dialog(retry_times=8, retry_waiting_duration=15):
-            sleeping_time = 15 * 60
-            logging.info(f"failed to select encounter, failed to handle failed dialog, wait {sleeping_time} seconds")
-            send_text(f"选择遭遇战失败，处理错误弹窗失败，等待 {sleeping_time} 秒")
-            _sleep_for_long_time(sleeping_time, event)
-            continue
+        for _ in range(5):
+            time.sleep(3)
+            if not _handle_encounter_failed_dialog(retry_times=8, retry_waiting_duration=15):
+                sleeping_time = 15 * 60
+                logging.info(
+                    f"failed to select encounter, failed to handle failed dialog, wait {sleeping_time} seconds")
+                send_text(f"选择遭遇战失败，处理错误弹窗失败，等待 {sleeping_time} 秒")
+                _sleep_for_long_time(sleeping_time, event)
+                continue
+
+            if gui_battle_continue.is_battling():
+                _start_battle_encounter(event)
+                time.sleep(2)
+                break
 
         time.sleep(2)
-
-        _start_battle_encounter(event)
-        time.sleep(2)
-
-        # _back_to_main_page()
-        # time.sleep(2)
         continue
 
     return

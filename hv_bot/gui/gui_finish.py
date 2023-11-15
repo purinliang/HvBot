@@ -55,7 +55,7 @@ def click_finish(fullscreen_image: Image) -> None:
     # send text that finish detected
     logging.info("finish detected")
 
-    send_text(f"检测到战斗结束，于{style_time}")
+    # send_text(f"检测到战斗结束，于{style_time}")
     saved_fullscreen_image_path = save_fullscreen_image("finish")
     send_image(saved_fullscreen_image_path)
 

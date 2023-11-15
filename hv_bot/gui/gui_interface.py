@@ -55,7 +55,7 @@ def close_spirit_stance(character: Character) -> None:
     if x < 0 or y < 0:
         logging.warning(f"close_spirit_stance failed, not find")
         return
-    logging.info(f"close_spirit_stance, cp={character.cp:.0f}")
+    logging.debug(f"close_spirit_stance, cp={character.cp:.0f}")
     move_and_click(x, y, ending_wait_duration=0.75)  # spirit stance requires a longer delay
     return
 
@@ -68,13 +68,13 @@ def use_spirit_stance(character: Character) -> None:
     if x < 0 or y < 0:
         logging.warning(f"use_spirit_stance failed, not find")
         return
-    logging.info(f"use_spirit_stance, cp={character.cp:.0f}")
+    logging.debug(f"use_spirit_stance, cp={character.cp:.0f}")
     move_and_click(x, y, ending_wait_duration=1.0)  # spirit stance requires a longer delay
     return
 
 
 def use_spell(character: Character, monster_list: MonsterList, spell_name: str, index: int) -> None:
-    logging.info(f"use_spell: spell_name={spell_name}")
+    logging.debug(f"use_spell: spell_name={spell_name}")
     x1, y1 = character.get_spell_location(spell_name)
     if x1 < 0 or y1 < 0:
         logging.warning("use_spell, location1 not find")
@@ -104,7 +104,7 @@ def use_gem(character: Character) -> None:
     if x < 0 or y < 0:
         logging.error(f"use_gem, gem={character.gem} not find")
         return
-    logging.warning(f"use_gem, gem={character.gem}")
+    logging.info(f"use_gem, gem={character.gem}")
     move_and_click(x, y, ending_wait_duration=0.25)
     return
 
@@ -114,7 +114,7 @@ def use_consumable(character: Character, consumable_name: str) -> None:
     if x < 0 or y < 0:
         logging.error(f"use_consumable, consumable={consumable_name} not find")
         return
-    logging.warning(f"use_consumable, consumable={consumable_name}")
+    logging.info(f"use_consumable, consumable={consumable_name}")
     move_and_click(x, y, ending_wait_duration=0.25)
     return
 

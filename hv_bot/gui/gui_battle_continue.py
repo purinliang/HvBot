@@ -11,6 +11,6 @@ def is_battling() -> bool:
         return True
 
     character, monster_list = gui_interface.get_info_from_fullscreen_image(fullscreen_image)
-    logging.warning(character)
-    logging.warning(monster_list)
+    logging.debug(f"is_battling character={character}")
+    logging.debug(f"is_battling monster_list={monster_list}")
     return character is not None and monster_list is not None
